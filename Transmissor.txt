@@ -1,0 +1,90 @@
+package Transmissor;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Transmissor {
+
+	public static void main(String[] args) {
+		try {
+			Socket connection = new Socket("172.16.232.55", 11111);
+			
+			ObjectOutputStream transmissor = new ObjectOutputStream(connection.getOutputStream());
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			String mensagem = null;
+			do{
+				mensagem = reader.readLine();
+				transmissor.writeObject(mensagem);
+				transmissor.flush();
+			}
+			while(!mensagem.toUpperCase().equals("FIM"));
+			
+			transmissor.close();
+			connection.close();
+		}
+		catch(Exception erro){
+			System.err.println(erro.getMessage());
+		}
+	}
+
+}
+
+
+
+
+package Receptor;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import org.omg.CORBA.Request;
+
+public class Receptor {
+	public static void main(String args[]) {
+		try{
+			ServerSocket receptor = new ServerSocket(5000);
+			Socket connection = receptor.accept();
+			ObjectInputStream server = new ObjectInputStream(connection.getInputStream());
+			String mensagem = null;
+			do{
+				mensagem = String.valueOf(server.readObject());
+				System.out.println(mensagem);
+			}while(!mensagem.toUpperCase().equals("FIM"));
+			
+			server.close();
+			connection.close();
+			receptor.close();
+		}
+		catch(Exception erro) {
+			System.err.println(erro.getMessage());
+		}
+	}
+}
+
+
+//////////
+
+
+GRANT ALL ON PROJETOII TO 'root'@'172.16.12.87' IDENTIFIED BY 'movile';
+
+USE PROJETOII;
+
+CAD/BLA/BLA/BLA
+
+set password for root@172.16.12.87=password('');
+
+SELECT * FROM tbl_usuario;
+
+SELECT user,host FROM mysql.user WHERE user='root';
+
+GRANT ALL PRIVILEGES ON *.* TO 'guilherme'@'172.16.12.87' WITH GRANT OPTION;
+
+CREATE USER 'guilherme'@'172.16.12.87' IDENTIFIED BY 'movile';
+
+SHOW GRANTS;

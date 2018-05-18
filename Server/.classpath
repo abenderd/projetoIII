@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/Microsoft JDBC Driver 6.4 for SQL Server/sqljdbc_6.4/enu/mssql-jdbc-6.4.0.jre7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/Microsoft JDBC Driver 6.4 for SQL Server/sqljdbc_6.4/enu/mssql-jdbc-6.4.0.jre8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/Microsoft JDBC Driver 6.4 for SQL Server/sqljdbc_6.4/enu/mssql-jdbc-6.4.0.jre9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/2018-04-09-20180417T223851Z-001/2018-04-09/mysql5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/2018-04-09-20180417T223851Z-001/2018-04-09/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abend/Downloads/2018-04-09-20180417T223851Z-001/2018-04-09/sqljdbc4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
