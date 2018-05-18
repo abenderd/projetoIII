@@ -11,8 +11,6 @@ import cliente.conection.ClientConexao;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -33,11 +31,12 @@ public class TelaLogin extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public void create() {
+
+	public void create(ClientConexao conecta) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaLogin frame = new TelaLogin();
+					TelaLogin frame = new TelaLogin(conecta);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +48,8 @@ public class TelaLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaLogin() {
+
+	public TelaLogin(ClientConexao conecta) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -72,25 +72,12 @@ public class TelaLogin extends JFrame {
 				if (senha.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Campos obrigatorios nao preenchidos.");
 				} else {
-					String ipServidor;
-					try {
-						ipServidor = new TelaConexaoCliente().conexao();
-						String mensagem = "LOG/" + email + "/" + " " + "/" + senha;
-
-						ClientConexao c = new ClientConexao(ipServidor);
-						c.Envia(mensagem);
-
-						// TelaAplicacao login = new TelaAplicacao();
-						// login.show();
-						// dispose();
-					} catch (UnknownHostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
+					String mensagem = "LOG/" + email + "/" + " " + "/" + senha;
+					conecta.Envia(mensagem);
+					
+					TelaInicial telaInicial = new TelaInicial(conecta);
+					telaInicial.show();
+					dispose();
 				}
 
 			}
@@ -113,7 +100,8 @@ public class TelaLogin extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				TelaCadastro cadastro = new TelaCadastro();
+
+				TelaCadastro cadastro = new TelaCadastro(conecta);
 				cadastro.show();
 				dispose();
 			}

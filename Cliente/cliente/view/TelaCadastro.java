@@ -36,11 +36,12 @@ public class TelaCadastro extends JFrame {
 	 * Launch the application.
 	 */
 
-	public void create() {
+
+	public void create(ClientConexao conecta) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaCadastro frame = new TelaCadastro();
+					TelaCadastro frame = new TelaCadastro(conecta);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,7 +53,8 @@ public class TelaCadastro extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCadastro() {
+
+	public TelaCadastro(ClientConexao conecta) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 546, 300);
 		contentPane = new JPanel();
@@ -80,25 +82,22 @@ public class TelaCadastro extends JFrame {
 				} else if (senha.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Campo senha deve ser preenchido.");
 				} else if (confirmacaoSenha.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Campo confirma��o de senha deve ser preenchido.");
+					JOptionPane.showMessageDialog(null, "Campo confirmacao de senha deve ser preenchido.");
 				} else if (senha.equals(confirmacaoSenha)) {
 
 					try {
-						String ipServidor = new TelaConexaoCliente().conexao();
-
 						String mensagem = "CAD/" + email + "/" + nome + "/" + senha;
-
-						ClientConexao c = new ClientConexao(ipServidor);
-						c.Envia(mensagem);
+						conecta.Envia(mensagem);
 					} catch (Exception erro) {
 						System.out.println(erro);
 					}
 
-					TelaLogin login = new TelaLogin();
+					TelaLogin login = new TelaLogin(conecta);
 					login.show();
 					dispose();
 				} else {
-					JOptionPane.showMessageDialog(null, "Senha e confirma��o de senha n�o conferem.");
+					JOptionPane.showMessageDialog(null, "Senha e confirmacao de senha nao conferem.");
+
 				}
 			}
 		});
@@ -110,7 +109,8 @@ public class TelaCadastro extends JFrame {
 		btnCancelar.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				TelaLogin login = new TelaLogin();
+
+				TelaLogin login = new TelaLogin(conecta);
 				login.show();
 				dispose();
 			}

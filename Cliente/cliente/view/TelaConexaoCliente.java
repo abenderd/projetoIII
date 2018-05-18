@@ -27,6 +27,7 @@ public class TelaConexaoCliente extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldIpServidor;
+	private ClientConexao conecta;
 
 	/**
 	 * Launch the application.
@@ -71,13 +72,13 @@ public class TelaConexaoCliente extends JFrame {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				if (textFieldIpServidor.getText().isEmpty() || textFieldIpServidor.getText() == "") {
-					JOptionPane.showMessageDialog(null, "Campo obrigat�rio n�o preenchido.");
+
+					JOptionPane.showMessageDialog(null, "Campo obrigatï¿½rio nï¿½o preenchido.");
 				} else {
 					try {
 
-						conexao();
-
-						TelaLogin login = new TelaLogin();
+						conecta = conexao();
+						TelaLogin login = new TelaLogin(conecta);
 						login.show();
 						dispose();
 					} catch (UnknownHostException erro) {
@@ -108,12 +109,13 @@ public class TelaConexaoCliente extends JFrame {
 		contentPane.add(btnCancelar);
 	}
 
-	public String conexao() throws UnknownHostException, IOException {
+
+	public ClientConexao conexao() throws UnknownHostException, IOException {
 		String ipServidor = textFieldIpServidor.getText();
 
-		new ClientConexao(ipServidor);
+		ClientConexao c = new ClientConexao(ipServidor);
 
-		return ipServidor;
+		return c;
 	}
 
 	@Override
