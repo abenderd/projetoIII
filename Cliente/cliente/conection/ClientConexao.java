@@ -10,11 +10,17 @@ import javax.swing.JOptionPane;
 
 public class ClientConexao {
 	private Socket connection;
+	private String ip;
 
 	public ClientConexao(String ip) throws UnknownHostException, IOException {
-		this.connection = new Socket(ip, 11111);
+		this.ip = ip;
+		abreConexao();
 		Thread t = new Thread(new Recebe());
 		t.start();
+	}
+	
+	public void abreConexao() throws UnknownHostException, IOException{
+		this.connection = new Socket(ip, 11111);
 	}
 
 	public void Envia(String menssagem) {
@@ -32,12 +38,14 @@ public class ClientConexao {
 		@Override
 		public void run() {
 			try {
-				ObjectInputStream server = new ObjectInputStream(connection.getInputStream());
 				String mensagem = null;
 				do {
+					ObjectInputStream server = new ObjectInputStream(connection.getInputStream());
 					mensagem = String.valueOf(server.readObject());
 					System.out.println(mensagem);
 					JOptionPane.showMessageDialog(null, mensagem);
+					server.close();
+					abreConexao();
 				} while (true);
 
 				// server.close();
