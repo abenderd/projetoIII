@@ -16,12 +16,17 @@ public class CadastroDAO {
 			throw new Exception("Cadastro nulo");
 
 		try {
-			String sql = "INSERT INTO tbl_usuario (email, senha, nome) VALUES (?,?,?)";
+			String sql = "INSERT INTO tbl_usuario (email, senha, nome, saldo, dtUltimaJogada) VALUES (?,?,?,?,?)";
+
+			java.util.Date data = new java.util.Date();
+			java.sql.Timestamp timestamp = new java.sql.Timestamp(data.getTime());
 
 			Conexao.conexao.prepareStatement(sql);
 			Conexao.conexao.setString(1, dbos.getEmail());
 			Conexao.conexao.setString(2, dbos.getSenha());
 			Conexao.conexao.setString(3, dbos.getNome());
+			Conexao.conexao.setFloat(4, 1000);
+			Conexao.conexao.setDate(5, timestamp);
 			Conexao.conexao.executeUpdate();
 			Conexao.conexao.commit();
 			throw new Exception("Cadastro do usuario: (" + dbos.getNome() + ") realizado com sucesso!");
@@ -86,4 +91,5 @@ public class CadastroDAO {
 
 		return cadastroDBO;
 	}
+
 }

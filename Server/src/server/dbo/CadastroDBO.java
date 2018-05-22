@@ -1,5 +1,6 @@
 package server.dbo;
 
+
 import javax.swing.JOptionPane;
 
 import server.dao.CadastroDAO;
@@ -8,7 +9,7 @@ public class CadastroDBO {
 	CadastroDAO cadastroDao = new CadastroDAO();
 
 	private String senha, email, nome;
-
+	
 	public CadastroDBO(String email, String senha, String nome) {
 		this.email = email;
 		this.senha = senha;
@@ -46,6 +47,7 @@ public class CadastroDBO {
 			JOptionPane.showMessageDialog(null, "Cadastro nao realizado senhas incompativeis");
 		}
 	}
+	
 
 	@Override
 	public int hashCode() {
@@ -53,8 +55,8 @@ public class CadastroDBO {
 		int result = 1;
 		result = prime * result + ((cadastroDao == null) ? 0 : cadastroDao.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
 	}
 
@@ -77,15 +79,15 @@ public class CadastroDBO {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (senha == null) {
-			if (other.senha != null)
-				return false;
-		} else if (!senha.equals(other.senha))
-			return false;
 		if (nome == null) {
 			if (other.nome != null)
 				return false;
 		} else if (!nome.equals(other.nome))
+			return false;
+		if (senha == null) {
+			if (other.senha != null)
+				return false;
+		} else if (!senha.equals(other.senha))
 			return false;
 		return true;
 	}
