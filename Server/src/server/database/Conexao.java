@@ -14,7 +14,7 @@ public class Conexao {
 		CadastroDAO _cadastroDao = null;
 
 		try {
-			_conexao = new MeuPreparedStatement("com.mysql.jdbc.Drive", "jdbc:mysql://127.0.0.1:3306/ProjetoII?useTimezone=true&serverTimezone=UTC",
+			_conexao = new MeuPreparedStatement("com.mysql.jdbc.Driver", "jdbc:mysql://127.0.0.1:3306/ProjetoII?useTimezone=true&serverTimezone=UTC",
 					"root", "");
 
 			_cadastroDao = new CadastroDAO();

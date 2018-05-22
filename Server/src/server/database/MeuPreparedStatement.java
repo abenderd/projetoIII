@@ -181,6 +181,10 @@ public class MeuPreparedStatement extends MeuStatement implements PreparedStatem
 		this.comando.setDate(parameterIndex, x);
 	}
 
+	public void setDate(int parameterIndex, Timestamp timestamp) throws SQLException {
+		this.comando.setTimestamp(parameterIndex, timestamp);
+	}
+	
 	public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
 		this.comando.setDate(parameterIndex, x, cal);
 	}
