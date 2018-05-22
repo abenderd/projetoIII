@@ -19,14 +19,17 @@ public class CadastroDAO {
 			String sql = "INSERT INTO tbl_usuario (email, senha, nome, saldo, dtUltimaJogada) VALUES (?,?,?,?,?)";
 
 			java.util.Date data = new java.util.Date();
-			java.sql.Timestamp timestamp = new java.sql.Timestamp(data.getTime());
+			java.text.SimpleDateFormat dataFormatada = 
+			     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			String currentTime = dataFormatada.format(data);
 
 			Conexao.conexao.prepareStatement(sql);
 			Conexao.conexao.setString(1, dbos.getEmail());
 			Conexao.conexao.setString(2, dbos.getSenha());
 			Conexao.conexao.setString(3, dbos.getNome());
 			Conexao.conexao.setFloat(4, 1000);
-			Conexao.conexao.setDate(5, timestamp);
+			Conexao.conexao.setString(5, currentTime);
 			Conexao.conexao.executeUpdate();
 			Conexao.conexao.commit();
 			throw new Exception("Cadastro do usuario: (" + dbos.getNome() + ") realizado com sucesso!");
