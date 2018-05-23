@@ -28,7 +28,7 @@ public class SaldoDAO {
 		return saldoDBO;
 	}
 
-	public SaldoDBO setSaldoEmergencial(String email, Float saldo) throws SQLException, Exception {
+	public SaldoDBO setSaldoEmergencial(String email) throws SQLException, Exception {
 
 		SaldoDBO setSaldoDBO = null;
 		String sql;

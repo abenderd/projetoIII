@@ -9,9 +9,9 @@ public class SaldoDBO {
 
 	private String email, nome, data;
 	
-	private Float saldo;
+	private float saldo;
 	
-	public SaldoDBO(String email, String nome, String data, Float saldo) {
+	public SaldoDBO(String email, String nome, String data, float saldo) {
 		this.email = email;
 		this.data = data;
 		this.nome = nome;
@@ -42,11 +42,11 @@ public class SaldoDBO {
 		this.data = data;
 	}
 
-	public Float getSaldo() {
+	public float getSaldo() {
 		return saldo;
 	}
 
-	public void setSaldo(Float saldo) {
+	public void setSaldo(float saldo) {
 		this.saldo = saldo;
 	}
 
@@ -57,7 +57,6 @@ public class SaldoDBO {
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((saldo == null) ? 0 : saldo.hashCode());
 		result = prime * result + ((saldoDAO == null) ? 0 : saldoDAO.hashCode());
 		return result;
 	}
@@ -85,11 +84,6 @@ public class SaldoDBO {
 			if (other.nome != null)
 				return false;
 		} else if (!nome.equals(other.nome))
-			return false;
-		if (saldo == null) {
-			if (other.saldo != null)
-				return false;
-		} else if (!saldo.equals(other.saldo))
 			return false;
 		if (saldoDAO == null) {
 			if (other.saldoDAO != null)

@@ -75,8 +75,8 @@ public class TelaLogin extends JFrame {
 					String mensagem = "LOG/" + email + "/" + " " + "/" + senha;
 					conecta.Envia(mensagem);
 					
-					TelaInicial telaInicial = new TelaInicial(conecta);
-					telaInicial.show();
+					TelaListaDePartida telaListaDePartida = new TelaListaDePartida(conecta);
+					telaListaDePartida.show();
 					dispose();
 				}
 

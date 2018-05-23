@@ -23,10 +23,10 @@ public class ClientConexao {
 		this.connection = new Socket(ip, 11111);
 	}
 
-	public void Envia(String menssagem) {
+	public void Envia(String mensagem) {
 		try {
 			ObjectOutputStream transmissor = new ObjectOutputStream(connection.getOutputStream());
-			transmissor.writeObject(menssagem);
+			transmissor.writeObject(mensagem);
 			transmissor.flush();
 			// transmissor.close();
 		} catch (Exception erro) {

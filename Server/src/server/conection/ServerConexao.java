@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 
 import server.dao.CadastroDAO;
+import server.dao.SaldoDAO;
 import server.dbo.CadastroDBO;
 
 public class ServerConexao {
@@ -31,6 +32,7 @@ public class ServerConexao {
 
 					CadastroDBO cad = new CadastroDBO(var2, var4, var3);
 					CadastroDAO cadDao = new CadastroDAO();
+					SaldoDAO sadDao = new SaldoDAO();
 
 					System.out.println(var1 + "/" + var2 + "/" + var3 + "/" + var4);
 
