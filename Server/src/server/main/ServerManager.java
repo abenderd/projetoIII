@@ -10,15 +10,18 @@ import server.conection.Transmissor;
 import server.dao.CadastroDAO;
 import server.dao.SaldoDAO;
 import server.dbo.CadastroDBO;
+import server.model.*;
 
 public class ServerManager {
 
 	private ArrayList<Socket> clientOutputStreams;
+	private ArrayList<Partida> partidas;
 	private Transmissor t;
-	ServerSocket receptor;
+	private ServerSocket receptor;
 	
 	public ServerManager(){
 		clientOutputStreams = new ArrayList();
+		partidas = new ArrayList();
 		t = new Transmissor();
 		go();
 	}
@@ -54,6 +57,8 @@ public class ServerManager {
 				System.out.println("Recebido uma nova conexao (" + clienteSocket.getInetAddress() + ")");
 				ObjectInputStream server = new ObjectInputStream(clienteSocket.getInputStream());
 				String mensagem = "";
+				Usuario usuario = null;
+				Partida partida = null;
 				while (true) {
 					mensagem = String.valueOf(server.readObject());
 					if (mensagem.toUpperCase().equals("FIM"))
@@ -69,7 +74,6 @@ public class ServerManager {
 
 						CadastroDBO cad = new CadastroDBO(var2, var4, var3);
 						CadastroDAO cadDao = new CadastroDAO();
-						SaldoDAO sadDao = new SaldoDAO();
 
 						System.out.println(var1 + "/" + var2 + "/" + var3 + "/" + var4);
 
@@ -106,6 +110,7 @@ public class ServerManager {
 							try {
 								cad = cadDao.getUsuario(var2, var3);
 								System.out.println(cad.toString());
+								usuario = new Usuario(var2, var3);
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								t.transmite(clienteSocket, var2 + "/" + e);
@@ -116,21 +121,58 @@ public class ServerManager {
 							t.transmite(clienteSocket, cad.getNome() + " Logado com sucesso");
 							break;
 						case "CRI":
-							
+							boolean repetido = false;
+							for(int count = 0;count < partidas.size();count ++){
+								if(var2.equals(partidas.get(count).getNomePartida())){
+									t.transmite(clienteSocket, "ERR/ / / ");
+									repetido = true;
+									break;
+								}
+							}
+							if(!repetido){
+								Partida nova = new Partida(var2, usuario);
+								partidas.add(nova);
+								partida = nova;
+								t.transmite(clienteSocket, "SUC/ / / ");
+							}
 							break;
 						case "PAR":
+							for(int x=0;x<partidas.size();x++){
+								t.transmite(clienteSocket, "PAR/"+ partidas.get(x).getNomePartida() + "/" + partidas.get(x).getStatus() + "/ ");
+							}
+							t.transmite(clienteSocket,"EOP/ / / ");
 							break;
 						case "ENT":
+							boolean success = false;
+							for(int x=0;x<partidas.size();x++){
+								if(partidas.get(x).getNomePartida().equals(var2)){
+									partidas.get(x).addUsuario(usuario);
+									partida = partidas.get(x);
+									success = true;
+									break;
+								}
+							}
+							if(success)
+								t.transmite(clienteSocket, "SUC/"+ usuario.getSaldo() +"/ / ");
+							else
+								t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "APO":
+							if(partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
+								t.transmite(clienteSocket, "SUC/ / / ");
+							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "CAR":
+							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "COM":
+							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "WIN":
+							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "SAI":
+							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						default:
 							t.transmite(clienteSocket, var2 + "MENSSAGEM INVALIDA");

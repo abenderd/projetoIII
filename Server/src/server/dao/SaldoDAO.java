@@ -9,23 +9,26 @@ import server.dbo.SaldoDBO;
 
 public class SaldoDAO {
 
-	public SaldoDBO getSaldo(String email) throws SQLException, Exception {
-		SaldoDBO saldoDBO = null;
-		String sql;
-
+	public int getSaldo(String email) throws SQLException, Exception {
 		try {
-			sql = "SELECT * FROM tbl_usuario WHERE eMail = '" + email + "'";
-
+			String sql = "SELECT saldo FROM tbl_usuario WHERE eMail = '" + email + "'";
 			Conexao.conexao.prepareStatement(sql);
 			MeuResultSet resultado = (MeuResultSet) Conexao.conexao.executeQuery();
-
-			saldoDBO = new SaldoDBO(resultado.getString("email"), resultado.getString("nome"), resultado.getString("dtUltimaJogada"), resultado.getFloat("saldo"));
-
+			return resultado.getInt(0);
 		} catch (Exception e) {
-			throw new Exception(e);
+			System.err.println("Erro para pegar Saldo - SaldoDAO getSaldo - " + e);
+			return -1;
 		}
-
-		return saldoDBO;
+	}
+	
+	public void setSaldo(String email, int valor) throws SQLException, Exception {
+		try {
+			String sql = "UPDATE tbl_usuario SET saldo =" + valor + " WHERE eMail = '" + email + "'";
+			Conexao.conexao.prepareStatement(sql);
+			MeuResultSet resultado = (MeuResultSet) Conexao.conexao.executeQuery();
+		} catch (Exception e) {
+			System.err.println("Erro para setar Saldo - SaldoDAO setSaldo - " + e);
+		}
 	}
 
 	public SaldoDBO setSaldoEmergencial(String email) throws SQLException, Exception {
