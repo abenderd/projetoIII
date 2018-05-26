@@ -31,6 +31,7 @@ public class Partida {
 			if(email.equals(usuarios.get(x).getEmail()))
 				if(usuarios.get(x).getSaldo() >= valor){
 					int novoSaldo = usuarios.get(x).getSaldo() - valor;
+					usuarios.get(x).setSaldo(novoSaldo);
 					try {
 						saldo.setSaldo(email, novoSaldo);
 						Pote p = new Pote(usuarios.get(x),valor);
@@ -50,21 +51,28 @@ public class Partida {
 		return usuarios;
 	}
 
-	public Carta getCarta() {
-		if (contadorCartas >= 52){
-			geraCartas();
-			contadorCartas = 0;
+	public Carta getCarta(String email) {
+		Carta c = null;
+		for(int x=0;x<usuarios.size();x++){
+			if(email.equals(usuarios.get(x).getEmail())){
+				if (contadorCartas >= 52){
+					geraCartas();
+					contadorCartas = 0;
+				}
+				contadorCartas++;
+				c = baralho.remove(0);
+				usuarios.get(x).setCartaMao(c);
+			}
 		}
-		contadorCartas++;
-		return baralho.remove(0);
+		return c;
 	}
 
 	public ArrayList<Pote> getPote() {
 		return pote;
 	}
 	
-	public void geraCartas(){
-		for(int x=0;x<52;x++){
+	private void geraCartas(){
+		for(int x=0;x<53;x++){
 			for(int y=1;y<5;y++){
 				Carta novaCarta = new Carta(x,y);
 				baralho.add(novaCarta);
@@ -98,6 +106,24 @@ public class Partida {
 			return true;
 		}
 	}
+	
+	public boolean fimRodada(){
+		for(int x=0;x<usuarios.size();x++){
+			if(usuarios.get(x).isComprandoCartas())
+				return false;
+		}
+		return true;
+	}
+	
+	public int getValorPorte(){ //So deve ser chamado quando a rodada terminar, pois zera o pote
+		int valor = 0;
+		for (int x=0;x<pote.size();x++){
+			valor = valor + pote.get(x).getValor();
+		}
+		this.pote = new ArrayList<Pote>();
+		return valor;
+	}
+	
 
 	public String getStatus() {
 		if(status)
@@ -108,6 +134,4 @@ public class Partida {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
-	
 }
