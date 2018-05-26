@@ -72,7 +72,7 @@ public class TelaLogin extends JFrame {
 				if (senha.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Campos obrigatorios nao preenchidos.");
 				} else {
-					String mensagem = "LOG/" + email + "/" + " " + "/" + senha;
+					String mensagem = "LOG/" + email + "/" + senha + "/" + " " ;
 					conecta.Envia(mensagem);
 					
 					TelaListaDePartida telaListaDePartida = new TelaListaDePartida(conecta);

@@ -22,7 +22,7 @@ public class TelaAposta extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textFieldSaldoDisponível;
+	private JTextField textFieldSaldoDisponivel;
 	private JTextField textFieldValorAposta;
 
 	/**
@@ -82,12 +82,12 @@ public class TelaAposta extends JFrame {
 		lblValorAposta.setBounds(57, 94, 117, 14);
 		contentPane.add(lblValorAposta);
 		
-		textFieldSaldoDisponível = new JTextField();
-		textFieldSaldoDisponível.setEnabled(false);
-		textFieldSaldoDisponível.setEditable(false);
-		textFieldSaldoDisponível.setBounds(184, 44, 86, 20);
-		contentPane.add(textFieldSaldoDisponível);
-		textFieldSaldoDisponível.setColumns(10);
+		textFieldSaldoDisponivel = new JTextField();
+		textFieldSaldoDisponivel.setEnabled(false);
+		textFieldSaldoDisponivel.setEditable(false);
+		textFieldSaldoDisponivel.setBounds(184, 44, 86, 20);
+		contentPane.add(textFieldSaldoDisponivel);
+		textFieldSaldoDisponivel.setColumns(10);
 		
 		textFieldValorAposta = new JTextField();
 		textFieldValorAposta.setColumns(10);

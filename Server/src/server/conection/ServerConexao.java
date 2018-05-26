@@ -36,24 +36,38 @@ public class ServerConexao {
 
 					System.out.println(var1 + "/" + var2 + "/" + var3 + "/" + var4);
 
-					// (VAR1/VAR2/VAR3/VAR4)
+					//(COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
+					//CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
+					//JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
+					//CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+					//CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou (EOP)
+					//ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL) ou (ERR)
+					//APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+					//DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL) + (CAR/NAIPE/VALOR/NULL)
+					//COMPRAR CARTAS - (COM/NULL/NULL/NULL) - (CAR/NAIPE/VALOR/NULL) +? OU (EOC)
+					//DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
+					//SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
+					
+					
 					// CLIENTE
 					// CAD - CADASTRO (CAD/EMAIL/NOME/SENHA)
 					// LOG - LOGIN (LOG/EMAIL/NOME/SENHA)
 					// SERVIDOR
 					// CAD - (OK - JA EXISTE)
 					// LOG - (EMAIL/LOGADO COM SUCESSO)
-
-					if (var1.equals("CAD")) {
+					
+					switch (var1) {
+					case "CAD":
 						try {
 							cadDao.cadastro(cad);
 						} catch (Exception e) {
 							t.transmite(connection, var2 + "/" + e);
 						}
 						t.transmite(connection, var2 + "Cadastrado com sucesso");
-					} else if (var1.equals("LOG")) {
+						break;
+					case "LOG":
 						try {
-							cad = cadDao.getUsuario(var2, var4);
+							cad = cadDao.getUsuario(var2, var3);
 							System.out.println(cad.toString());
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
@@ -63,8 +77,27 @@ public class ServerConexao {
 							t.transmite(connection, var2 + "/" + e);
 						}
 						t.transmite(connection, cad.getNome() + " Logado com sucesso");
-					} else {
+						break;
+					case "CRI":
+						
+						break;
+					case "PAR":
+						break;
+					case "ENT":
+						break;
+					case "APO":
+						break;
+					case "CAR":
+						break;
+					case "COM":
+						break;
+					case "WIN":
+						break;
+					case "SAI":
+						break;
+					default:
 						t.transmite(connection, var2 + "MENSSAGEM INVALIDA");
+						break;				
 					}
 				} catch (Exception e) {
 					t.transmite(connection, "MENSSAGEM INVALIDA");

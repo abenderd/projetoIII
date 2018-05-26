@@ -15,8 +15,6 @@ public class ClientConexao {
 	public ClientConexao(String ip) throws UnknownHostException, IOException {
 		this.ip = ip;
 		abreConexao();
-		Thread t = new Thread(new Recebe());
-		t.start();
 	}
 	
 	public void abreConexao() throws UnknownHostException, IOException{
@@ -28,32 +26,27 @@ public class ClientConexao {
 			ObjectOutputStream transmissor = new ObjectOutputStream(connection.getOutputStream());
 			transmissor.writeObject(mensagem);
 			transmissor.flush();
+			Recebe();
 			// transmissor.close();
 		} catch (Exception erro) {
-			System.err.println(erro.getMessage());
+			System.err.println("ClientConexao - Envia - " + erro.getMessage());
 		}
 	}
 
-	private class Recebe implements Runnable {
-		@Override
-		public void run() {
-			try {
-				String mensagem = null;
-				do {
-					ObjectInputStream server = new ObjectInputStream(connection.getInputStream());
-					mensagem = String.valueOf(server.readObject());
-					System.out.println(mensagem);
-					JOptionPane.showMessageDialog(null, mensagem);
-					server.close();
-					abreConexao();
-				} while (true);
-
-				// server.close();
-			} catch (Exception erro) {
-				System.err.println(erro.getMessage());
-			}
+	public String Recebe() {
+		String mensagem = null;
+		try {
+			ObjectInputStream server = new ObjectInputStream(connection.getInputStream());
+			mensagem = String.valueOf(server.readObject());
+			System.out.println(mensagem);
+			JOptionPane.showMessageDialog(null, mensagem);
+			//server.close();
+			//abreConexao();
+		} catch (Exception erro) {
+			System.err.println("ClientConexao - Recebe - " + erro.getMessage());
 		}
-	}
+		return mensagem;
+	}	
 
 	@Override
 	public int hashCode() {
