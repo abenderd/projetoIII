@@ -7,9 +7,9 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-
 import server.conection.Transmissor;
 import server.dao.CadastroDAO;
+import server.dao.CreditaConta;
 import server.dbo.CadastroDBO;
 import server.model.*;
 
@@ -54,12 +54,12 @@ public class ServerManager {
 		
 		@Override
 		public void run() {
+			Usuario usuario = null;
+			Partida partida = null;
 			try {
 				System.out.println("Recebido uma nova conexao (" + clienteSocket.getInetAddress() + ")");
 				ObjectInputStream server = new ObjectInputStream(clienteSocket.getInputStream());
 				String mensagem = "";
-				Usuario usuario = null;
-				Partida partida = null;
 				while (true) {
 					mensagem = String.valueOf(server.readObject());
 					if (mensagem.toUpperCase().equals("FIM"))
@@ -250,6 +250,8 @@ public class ServerManager {
 					if(!usuario.isAguardandoSaldo()){
 						usuario.setAguardandoSaldo(true);
 						//PROGRAMA
+						Thread t = new Thread(new CreditaConta(usuario));
+						t.start();
 					}
 				}
 				// connection.close();
@@ -258,11 +260,20 @@ public class ServerManager {
 				System.err.println("ServerManager - Null Pointer (Usuario Desconhecido?) - " + e);
 			} catch (ClassNotFoundException e) {
 				System.err.println("ServerManager - server.readObject (ClassNotFoundException) - " + e);
-			} catch (IOException e1) {
-				System.err.println("ServerManager - ObjectInputStream (Usuario " + clienteSocket.getLocalAddress() + " Saiu)");
-				//IMPLEMENTAR SAIDA AQUI
+			} catch (IOException e) {
+				try {
+					System.err.println("ServerManager - ObjectInputStream (Usuario " + clienteSocket.getLocalAddress() + " Saiu)");
+					encerraPartida(partida, clienteSocket, usuario);
+				} catch (IOException f) {
+					System.err.println("ServerManager - Erro ao retirar usuario da partida apos sair - " + f);
+				}
 			}
 		}
+	}
+	
+	public void encerraPartida(Partida partida, Socket socket, Usuario usuario) throws IOException{
+		partida.removeUsuario(usuario.getEmail());
+		socket.close();
 	}
 
 	@Override

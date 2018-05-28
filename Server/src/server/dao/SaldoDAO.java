@@ -18,7 +18,6 @@ public class SaldoDAO {
 				return Integer.parseInt(resultado.getString("saldo"));
 			else
 				return -1;
-			
 		} catch (Exception e) {
 			System.err.println("Erro para pegar Saldo - SaldoDAO getSaldo - " + e);
 			return -1;
