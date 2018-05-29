@@ -263,6 +263,7 @@ public class ServerManager {
 			} catch (IOException e) {
 				try {
 					System.err.println("ServerManager - ObjectInputStream (Usuario " + clienteSocket.getLocalAddress() + " Saiu)");
+					if(partida != null)
 					encerraPartida(partida, clienteSocket, usuario);
 				} catch (IOException f) {
 					System.err.println("ServerManager - Erro ao retirar usuario da partida apos sair - " + f);
