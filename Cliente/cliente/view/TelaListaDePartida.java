@@ -7,9 +7,26 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import cliente.conection.ClientConexao;
+import server.main.ServerManager;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.AbstractListModel;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
+import javax.swing.SpringLayout;
+import java.awt.CardLayout;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class TelaListaDePartida extends JFrame {
 
@@ -29,6 +46,8 @@ public class TelaListaDePartida extends JFrame {
 				try {
 					TelaListaDePartida frame = new TelaListaDePartida(conecta);
 					frame.setVisible(true);
+					
+					consultarPartidas();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -38,54 +57,105 @@ public class TelaListaDePartida extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public TelaListaDePartida(ClientConexao conecta) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		
+		JButton btnSair = new JButton("Sair");
+		btnSair.setBounds(11, 219, 105, 30);
+		btnSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);				
+			}
+		});
+		btnSair.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		JButton btnIniciarPartida = new JButton("Iniciar Partida");
+		btnIniciarPartida.setBounds(287, 219, 131, 30);
+		btnIniciarPartida.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				consultarPartidas();
+			}
+		});
+		
+		JButton btnCriarPartida = new JButton("Criar Partida");
+		btnCriarPartida.setBounds(139, 219, 125, 30);
+		btnCriarPartida.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nomePartida = JOptionPane.showInputDialog((Component) e.getSource(), "Qual sera o nome da partida?");
+		        if (nomePartida != null && !nomePartida.equals("")) {
+		        	try {
+		        		//CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+		        		ServerManager criarPartida = new ServerManager();
+		        		
+		        		String mensagem = "CRI/" + nomePartida + "/" + null + "/" + null ;
+						conecta.Envia(mensagem);
+						
+		        		JOptionPane.showMessageDialog((Component) e.getSource(), "Partida " + nomePartida + " criada com sucesso.");
+		        	} catch (Exception erroCriarPartida) {
+		        		JOptionPane.showMessageDialog((Component) e.getSource(), "Erro ao criar partida.");
+		        		System.out.println(erroCriarPartida);
+		        	}
+		          
+		        }
+			}
+		});
+		btnCriarPartida.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnIniciarPartida.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		JLabel lblPartidasIniciadas = new JLabel("Partidas Iniciadas");
+		lblPartidasIniciadas.setBounds(11, 11, 206, 35);
+		lblPartidasIniciadas.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		JLabel lblPartidasEmEspera = new JLabel("Partidas Em Espera");
+		lblPartidasEmEspera.setBounds(206, 11, 212, 35);
+		lblPartidasEmEspera.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		JList listPartidasIniciadas = new JList();
+		listPartidasIniciadas.setBounds(11, 40, 180, 160);
+		listPartidasIniciadas.setBackground(Color.WHITE);
+		listPartidasIniciadas.setVisibleRowCount(10);
+		listPartidasIniciadas.setModel(new AbstractListModel() {
+			String[] values = new String[] {"Lista 1", "Lista 2", "Lista 1", "Lista 2", "Lista 1", "Lista 2", "Lista 1", "Lista 8", "Lista 9", "Lista 10"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
 		contentPane.setLayout(null);
+		contentPane.add(lblPartidasIniciadas);
+		contentPane.add(lblPartidasEmEspera);
+		contentPane.add(listPartidasIniciadas);
+		contentPane.add(btnCriarPartida);
+		contentPane.add(btnIniciarPartida);
+		contentPane.add(btnSair);
 		
-		JLabel lblJogadores = new JLabel("Jogadores:");
-		lblJogadores.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblJogadores.setBounds(10, 11, 67, 14);
-		contentPane.add(lblJogadores);
+		@SuppressWarnings("rawtypes")
+		JList listPartidasEmEspera = new JList();
+		listPartidasEmEspera.setVisibleRowCount(10);
+		listPartidasEmEspera.setBackground(Color.WHITE);
+		listPartidasEmEspera.setBounds(206, 40, 180, 160);
+		contentPane.add(listPartidasEmEspera);
+	}
+	
+	private boolean consultarPartidas () {
+		try {
+			ServerManager partida = new ServerManager();
+			//CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou (EOP)
+			String partidasIniciadas = "PAR/" + " " + "/" + " "+ "/" + null ;
+			System.out.println(partida + "Consultando partidas iniciadas.");
+			
+			return true;
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
+		}
 		
-		JLabel lblJogador1 = new JLabel("1. Nome do Jogador 1");
-		lblJogador1.setBounds(10, 36, 118, 14);
-		contentPane.add(lblJogador1);
-		
-		JLabel lblJogador2 = new JLabel("2. Nome do Jogador 2");
-		lblJogador2.setBounds(10, 50, 118, 14);
-		contentPane.add(lblJogador2);
-		
-		JLabel lblJogador3 = new JLabel("3. Nome do Jogador 3");
-		lblJogador3.setBounds(10, 64, 118, 14);
-		contentPane.add(lblJogador3);
-		
-		JLabel lblJogador4 = new JLabel("4. Nome do Jogador 4");
-		lblJogador4.setBounds(10, 78, 118, 14);
-		contentPane.add(lblJogador4);
-		
-		JLabel lblJogador5 = new JLabel("5. Nome do Jogador 5");
-		lblJogador5.setBounds(10, 92, 118, 14);
-		contentPane.add(lblJogador5);
-		
-		JLabel lblJogador6 = new JLabel("6. Nome do Jogador 6");
-		lblJogador6.setBounds(10, 106, 118, 14);
-		contentPane.add(lblJogador6);
-		
-		JLabel lblJogador7 = new JLabel("7. Nome do Jogador 7");
-		lblJogador7.setBounds(10, 120, 118, 14);
-		contentPane.add(lblJogador7);
-		
-		JLabel lblJogador8 = new JLabel("8. Nome do Jogador 8");
-		lblJogador8.setBounds(10, 134, 118, 14);
-		contentPane.add(lblJogador8);
-		
-		JButton btnFinalizarPartida = new JButton("Finalizar Partida");
-		btnFinalizarPartida.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnFinalizarPartida.setBounds(77, 201, 159, 23);
-		contentPane.add(btnFinalizarPartida);
 	}
 }
