@@ -12,8 +12,11 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
 
@@ -75,7 +78,11 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		JButton btnIniciarRodada = new JButton("Iniciar Rodada");
 		btnIniciarRodada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
+				String aposta = JOptionPane.showInputDialog((Component) arg0.getSource(), "Qual sera o valor da aposta?");
+				int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
+				
+				System.out.println("Title is:" + aposta);
+				System.out.println("Aposta is:" + valorAposta);
 			}
 		});
 		btnIniciarRodada.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -85,7 +92,7 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		JTextPane txtpnARodadaPoder = new JTextPane();
 		txtpnARodadaPoder.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		txtpnARodadaPoder.setEditable(false);
-		txtpnARodadaPoder.setText("A rodada poder\u00E1 ser iniciada quando houver no m\u00EDnimo 3 jogadores.");
+		txtpnARodadaPoder.setText("A rodada podera ser iniciada quando houver no minimo 3 jogadores.");
 		txtpnARodadaPoder.setBounds(33, 70, 277, 74);
 		contentPane.add(txtpnARodadaPoder);
 	}
