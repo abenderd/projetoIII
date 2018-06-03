@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -35,6 +37,7 @@ public class TelaListaDePartida extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JList listPartidasEmEspera;
 
 	/**
 	 * Launch the application.
@@ -78,7 +81,14 @@ public class TelaListaDePartida extends JFrame {
 		btnIniciarPartida.setBounds(287, 219, 131, 30);
 		btnIniciarPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				consultarPartidas();
+				String nomePartida = listPartidasEmEspera.getSelectedValue().toString();
+				//ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL) ou (ERR)
+	    		String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null ;
+				conecta.Envia(entrarPartida);
+	    		
+	    		TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
+	    		telaAguardaPartidaIniciar.show();
+				dispose();
 			}
 		});
 		
@@ -90,12 +100,20 @@ public class TelaListaDePartida extends JFrame {
 		        if (nomePartida != null && !nomePartida.equals("")) {
 		        	try {
 		        		//CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-		        		ServerManager criarPartida = new ServerManager();
 		        		
-		        		String mensagem = "CRI/" + nomePartida + "/" + null + "/" + null ;
-						conecta.Envia(mensagem);
+		        		String criarPartida = "CRI/" + nomePartida + "/" + null + "/" + null ;
+						conecta.Envia(criarPartida);
 						
 		        		JOptionPane.showMessageDialog((Component) e.getSource(), "Partida " + nomePartida + " criada com sucesso.");
+		        		
+		        		//ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL) ou (ERR)
+		        		String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null ;
+						conecta.Envia(entrarPartida);
+		        		
+		        		TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
+		        		telaAguardaPartidaIniciar.show();
+						dispose();
+		        		
 		        	} catch (Exception erroCriarPartida) {
 		        		JOptionPane.showMessageDialog((Component) e.getSource(), "Erro ao criar partida.");
 		        		System.out.println(erroCriarPartida);
@@ -138,6 +156,7 @@ public class TelaListaDePartida extends JFrame {
 		
 		@SuppressWarnings("rawtypes")
 		JList listPartidasEmEspera = new JList();
+		this.listPartidasEmEspera = listPartidasEmEspera;
 		listPartidasEmEspera.setVisibleRowCount(10);
 		listPartidasEmEspera.setBackground(Color.WHITE);
 		listPartidasEmEspera.setBounds(206, 40, 180, 160);
