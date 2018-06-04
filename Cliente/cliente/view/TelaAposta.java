@@ -69,8 +69,8 @@ public class TelaAposta extends JFrame {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				//APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-				String entrarPartida = "APO/" + nomePartida + "/" + null + "/" + null ;
-				conecta.Envia(entrarPartida);
+				//String entrarPartida = "APO/" + nomePartida + "/" + null + "/" + null ;
+				//conecta.Envia(entrarPartida);
 				
 				dispose();
 			}

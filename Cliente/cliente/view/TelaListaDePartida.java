@@ -63,13 +63,13 @@ public class TelaListaDePartida extends JFrame {
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public TelaListaDePartida(ClientConexao conecta) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 451, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JButton btnSair = new JButton("Sair");
-		btnSair.setBounds(11, 219, 105, 30);
+		btnSair.setBounds(11, 270, 105, 30);
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);				
@@ -78,7 +78,7 @@ public class TelaListaDePartida extends JFrame {
 		btnSair.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
 		JButton btnIniciarPartida = new JButton("Iniciar Partida");
-		btnIniciarPartida.setBounds(287, 219, 131, 30);
+		btnIniciarPartida.setBounds(287, 270, 131, 30);
 		btnIniciarPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nomePartida = listPartidasEmEspera.getSelectedValue().toString();
@@ -93,7 +93,7 @@ public class TelaListaDePartida extends JFrame {
 		});
 		
 		JButton btnCriarPartida = new JButton("Criar Partida");
-		btnCriarPartida.setBounds(139, 219, 125, 30);
+		btnCriarPartida.setBounds(139, 270, 125, 30);
 		btnCriarPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nomePartida = JOptionPane.showInputDialog((Component) e.getSource(), "Qual sera o nome da partida?");
@@ -134,7 +134,7 @@ public class TelaListaDePartida extends JFrame {
 		lblPartidasEmEspera.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JList listPartidasIniciadas = new JList();
-		listPartidasIniciadas.setBounds(11, 40, 180, 160);
+		listPartidasIniciadas.setBounds(11, 40, 185, 193);
 		listPartidasIniciadas.setBackground(Color.WHITE);
 		listPartidasIniciadas.setVisibleRowCount(10);
 		listPartidasIniciadas.setModel(new AbstractListModel() {
@@ -159,7 +159,7 @@ public class TelaListaDePartida extends JFrame {
 		this.listPartidasEmEspera = listPartidasEmEspera;
 		listPartidasEmEspera.setVisibleRowCount(10);
 		listPartidasEmEspera.setBackground(Color.WHITE);
-		listPartidasEmEspera.setBounds(206, 40, 180, 160);
+		listPartidasEmEspera.setBounds(206, 40, 179, 193);
 		contentPane.add(listPartidasEmEspera);
 	}
 	
