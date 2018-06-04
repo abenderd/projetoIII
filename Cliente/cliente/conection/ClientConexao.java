@@ -53,7 +53,7 @@ public class ClientConexao {
 		}
 	}
 	
-	private String recebe1Msg() throws Exception{
+	public String recebe1Msg() throws Exception{
 		try {
 			String mensagem;
 			if(server == null)
@@ -65,7 +65,7 @@ public class ClientConexao {
 		}
 	}
 	
-	private ArrayList<String> recebeNMsg(String CondParada) throws Exception{ //recebe msg até parar
+	public ArrayList<String> recebeNMsg(String CondParada) throws Exception{ //recebe msg até parar
 		try {
 			ArrayList<String> msgs = new ArrayList<String>();
 			String mensagem = null;
