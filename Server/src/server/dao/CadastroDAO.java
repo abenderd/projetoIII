@@ -32,7 +32,7 @@ public class CadastroDAO {
 			Conexao.conexao.setString(5, currentTime);
 			Conexao.conexao.executeUpdate();
 			Conexao.conexao.commit();
-			throw new Exception("Cadastro do usuario: (" + dbos.getNome() + ") realizado com sucesso!");
+			//throw new Exception("Cadastro do usuario: (" + dbos.getNome() + ") realizado com sucesso!");
 			
 		} catch (SQLException e) {
 			throw new Exception("Erro ao realizar cadastro." + e);

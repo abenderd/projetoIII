@@ -5,13 +5,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
 public class ClientConexao {
 	private Socket connection;
 	private String ip;
-	
+	private ObjectInputStream server;
+	private ObjectOutputStream transmissor;
 	//(COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
 	//CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
 	//JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
@@ -27,38 +29,60 @@ public class ClientConexao {
 	public ClientConexao(String ip) throws UnknownHostException, IOException {
 		this.ip = ip;
 		abreConexao();
+		//Thread t = new Thread(new ClientRecebe(connection));
+		//t.start();
 	}
 	
 	public void abreConexao() throws UnknownHostException, IOException{
 		this.connection = new Socket(ip, 11111);
+		server = null;
+		transmissor = null;
 	}
 
 	public void Envia(String mensagem) {
 		try {
-			ObjectOutputStream transmissor = new ObjectOutputStream(connection.getOutputStream());
+			if(transmissor == null)
+				transmissor = new ObjectOutputStream(connection.getOutputStream());
 			transmissor.writeObject(mensagem);
 			transmissor.flush();
-			Recebe();
-			// transmissor.close();
+			server = null;
+			System.out.println("Enviado - " + mensagem);
+			JOptionPane.showMessageDialog(null, recebe1Msg());
 		} catch (Exception erro) {
 			System.err.println("ClientConexao - Envia - " + erro.getMessage());
 		}
 	}
-
-	public String Recebe() {
-		String mensagem = null;
+	
+	public String recebe1Msg() throws Exception{
 		try {
-			ObjectInputStream server = new ObjectInputStream(connection.getInputStream());
+			String mensagem;
+			if(server == null)
+				server = new ObjectInputStream(connection.getInputStream());
 			mensagem = String.valueOf(server.readObject());
-			System.out.println(mensagem);
-			JOptionPane.showMessageDialog(null, mensagem);
-			//server.close();
-			//abreConexao();
+			return mensagem;
 		} catch (Exception erro) {
-			System.err.println("ClientConexao - Recebe - " + erro.getMessage());
+			throw new Exception("ClientConexao - recebe1Msg - " + erro.getMessage());
 		}
-		return mensagem;
-	}	
+	}
+	
+	public ArrayList<String> recebeNMsg(String CondParada) throws Exception{ //recebe msg até parar
+		try {
+			ArrayList<String> msgs = new ArrayList<String>();
+			String mensagem = null;
+			if(server == null)
+				server = new ObjectInputStream(connection.getInputStream());
+			while(true){
+				mensagem = String.valueOf(server.readObject());
+				if(!mensagem.equals(CondParada))
+					break;
+				System.out.println("Recebido menssagem - " + mensagem);
+				msgs.add(mensagem);
+			}
+			return msgs;
+		} catch (Exception erro) {
+			throw new Exception("ClientConexao - recebeNMsg - " + erro.getMessage());
+		}
+	}
 
 	@Override
 	public int hashCode() {

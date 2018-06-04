@@ -76,8 +76,7 @@ public class TelaConexaoCliente extends JFrame {
 					JOptionPane.showMessageDialog(null, "Campo obrigatï¿½rio nï¿½o preenchido.");
 				} else {
 					try {
-
-						conecta = conexao();
+						conecta = new ClientConexao(textFieldIpServidor.getText());
 						TelaLogin login = new TelaLogin(conecta);
 						login.show();
 						dispose();
@@ -109,14 +108,14 @@ public class TelaConexaoCliente extends JFrame {
 		contentPane.add(btnCancelar);
 	}
 
-
-	public ClientConexao conexao() throws UnknownHostException, IOException {
-		String ipServidor = textFieldIpServidor.getText();
-
-		ClientConexao c = new ClientConexao(ipServidor);
-
-		return c;
-	}
+	/*
+	 * public ClientConexao conexao() throws UnknownHostException, IOException {
+	 * String ipServidor = textFieldIpServidor.getText();
+	 * 
+	 * ClientConexao c = new ClientConexao(ipServidor);
+	 * 
+	 * return c; }
+	 */
 
 	@Override
 	public int hashCode() {
