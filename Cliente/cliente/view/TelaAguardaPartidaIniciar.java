@@ -27,7 +27,6 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -59,21 +58,14 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnSair = new JButton("Sair");
+		btnSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		btnSair.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnSair.setBounds(33, 172, 117, 23);
 		contentPane.add(btnSair);
-		
-		textField = new JTextField();
-		textField.setEnabled(false);
-		textField.setEditable(false);
-		textField.setColumns(10);
-		textField.setBounds(280, 11, 30, 20);
-		contentPane.add(textField);
-		
-		JLabel lblQuantidadeDeJogadores = new JLabel("Quantidade de Jogadores:");
-		lblQuantidadeDeJogadores.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblQuantidadeDeJogadores.setBounds(124, 13, 167, 14);
-		contentPane.add(lblQuantidadeDeJogadores);
 		
 		JButton btnIniciarRodada = new JButton("Iniciar Rodada");
 		btnIniciarRodada.addActionListener(new ActionListener() {
@@ -84,6 +76,11 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 				// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
 				String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
 				conecta.Envia(apostar);
+				
+								
+				TelaRodada telaRodada = new TelaRodada(conecta);
+				telaRodada.show();
+				dispose();
 			}
 		});
 		btnIniciarRodada.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -96,5 +93,9 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		txtpnARodadaPoder.setText("A rodada podera ser iniciada quando houver no minimo 3 jogadores.");
 		txtpnARodadaPoder.setBounds(33, 70, 277, 74);
 		contentPane.add(txtpnARodadaPoder);
+		
+		JLabel label = new JLabel("");
+		label.setBounds(33, 11, 46, 14);
+		contentPane.add(label);
 	}
 }
