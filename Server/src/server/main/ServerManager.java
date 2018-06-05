@@ -168,21 +168,28 @@ public class ServerManager {
 								InputMismatchException erro = new InputMismatchException(
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
-							}
-							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
+							}else if(!partida.iniciaPartida()){
+								InputMismatchException erro = new InputMismatchException(
+										"(APO) Jogadores insulficientes para iniciar partida");
+								t.transmite(clienteSocket, "ERR/"+ erro + "/ / ");
+								throw erro;
+							}else if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
 								t.transmite(clienteSocket, "SUC/ / / ");
+							else
 							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "CAR":
-							usuario.setComprandoCartas(true);
-							if (partida == null) {
+							if(!partida.iniciaPartida()){
 								InputMismatchException erro = new InputMismatchException(
-										"(CAR) Voce precisa estar em uma partida para solicitar cartas");
+										"(CAR) Jogadores insulficientes para iniciar partida");
+								t.transmite(clienteSocket, "ERR/"+ erro + "/ / ");
 								throw erro;
-							}
-							for (int x = 0; x < 2; x++) {
-								Carta c = partida.getCarta(usuario.getEmail());
-								t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
+							}else{
+								usuario.setComprandoCartas(true);
+								for (int x = 0; x < 2; x++) {
+									Carta c = partida.getCarta(usuario.getEmail());
+									t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
+								}
 							}
 							break;
 						case "COM":
