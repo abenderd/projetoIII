@@ -2,9 +2,9 @@ package server.model;
 
 public class Pote {
 	private Usuario usuario;
-	private int valor;
-	
-	public Pote(Usuario usuario, int valor) {
+	private float valor;
+
+	public Pote(Usuario usuario, float valor) {
 		super();
 		this.usuario = usuario;
 		this.valor = valor;
@@ -13,8 +13,8 @@ public class Pote {
 	public Usuario getUsuario() {
 		return usuario;
 	}
-	
-	public int getValor() {
+
+	public float getValor() {
 		return valor;
 	}
 }

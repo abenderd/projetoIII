@@ -77,7 +77,7 @@ public class ClientConexao {
 				mensagem = String.valueOf(server.readObject());
 				if (!mensagem.equals(CondParada))
 					break;
-				System.out.println("Recebido menssagem - " + mensagem);
+				System.out.println("Recebido mensagem - " + mensagem);
 				msgs.add(mensagem);
 			}
 			return msgs;

@@ -26,11 +26,11 @@ public class Partida {
 		geraCartas();
 	}
 
-	public boolean Apostar(String email, int valor) {
+	public boolean Apostar(String email, float valor) {
 		for (int x = 0; x < usuarios.size(); x++) {
 			if (email.equals(usuarios.get(x).getEmail()))
 				if (usuarios.get(x).getSaldo() >= valor) {
-					int novoSaldo = usuarios.get(x).getSaldo() - valor;
+					float novoSaldo = usuarios.get(x).getSaldo() - valor;
 					usuarios.get(x).setSaldo(novoSaldo);
 					try {
 						saldo.setSaldo(email, novoSaldo);
@@ -115,8 +115,8 @@ public class Partida {
 		return true;
 	}
 
-	public int getValorPorte() { // So deve ser chamado quando a rodada terminar, pois zera o pote
-		int valor = 0;
+	public float getValorPorte() { // So deve ser chamado quando a rodada terminar, pois zera o pote
+		float valor = 0;
 		for (int x = 0; x < pote.size(); x++) {
 			valor = valor + pote.get(x).getValor();
 		}

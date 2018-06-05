@@ -8,7 +8,7 @@ import server.dao.SaldoDAO;
 
 public class Usuario {
 	private String nome, email;
-	private int saldo;
+	private float saldo;
 	private boolean comprandoCartas;
 	private boolean aguardandoSaldo;
 	private ArrayList<Carta> mao;
@@ -67,7 +67,7 @@ public class Usuario {
 		this.mao.add(mao);
 	}
 
-	public void setSaldo(int saldo) {
+	public void setSaldo(float saldo) {
 		this.saldo = saldo;
 	}
 

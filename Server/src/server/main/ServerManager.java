@@ -10,6 +10,7 @@ import java.util.InputMismatchException;
 import server.conection.Transmissor;
 import server.dao.CadastroDAO;
 import server.dao.CreditaConta;
+import server.dao.SaldoDAO;
 import server.dbo.CadastroDBO;
 import server.model.*;
 
@@ -66,6 +67,7 @@ public class ServerManager {
 						break;
 					String[] temp;
 					String delimiter = "/";
+					SaldoDAO saldoDAO = new SaldoDAO();
 					temp = mensagem.split(delimiter);
 					try {
 						String var1 = temp[0];
@@ -169,8 +171,16 @@ public class ServerManager {
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
 							}
-							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
+							if (partida.Apostar(usuario.getEmail(), Float.parseFloat(var2))) {
+								String email = usuario.getEmail();
+								Float saldo = (float) saldoDAO.getSaldo(email);
+								Float aposta = Float.parseFloat(var2);
+
 								t.transmite(clienteSocket, "SUC/ / / ");
+								if (saldo < aposta) {
+									t.transmite(clienteSocket, "ERR/ / / ");
+								}
+							}
 							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "CAR":
@@ -211,7 +221,7 @@ public class ServerManager {
 								ArrayList<Usuario> usuarios = partida.getUsuarios();
 								ArrayList<Usuario> ganhadores = new ArrayList<Usuario>();
 								ArrayList<Usuario> perdedores = new ArrayList<Usuario>();
-								int valorPote = partida.getValorPorte();
+								float valorPote = partida.getValorPorte();
 								// ganhadores.add(usuarios.remove(0));
 								while (usuarios.size() > 0) {
 									Usuario atual = usuarios.remove(0);
@@ -340,7 +350,5 @@ public class ServerManager {
 	public void setPartidas(ArrayList<Partida> partidas) {
 		this.partidas = partidas;
 	}
-	
-	
 
 }

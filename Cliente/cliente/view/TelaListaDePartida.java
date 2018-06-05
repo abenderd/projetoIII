@@ -43,6 +43,7 @@ public class TelaListaDePartida extends JFrame {
 	private JPanel contentPane;
 	private JList listPartidasEmEspera;
 	DefaultListModel listaEmEspera = new DefaultListModel();
+	ServerManager serverManagaer = new ServerManager();
 
 	/**
 	 * Launch the application.
@@ -68,6 +69,7 @@ public class TelaListaDePartida extends JFrame {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public TelaListaDePartida(ClientConexao conecta) {
+		consultarPartidas(conecta);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 451, 350);
 		contentPane = new JPanel();
@@ -110,7 +112,6 @@ public class TelaListaDePartida extends JFrame {
 				
 				if (nomePartida != null && !nomePartida.equals("")) {
 					try {
-						ServerManager serverManagaer = new ServerManager();
 						// CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
 						String criarPartida = "CRI/" + nomePartida + "/" + null + "/" + null;
 						conecta.Envia(criarPartida);
@@ -202,8 +203,13 @@ public class TelaListaDePartida extends JFrame {
 			// (EOP)
 			String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
 			conecta.Envia(partidasIniciadas);
-			System.out.println(partidasIniciadas + "Consultando partidas iniciadas.");		
+			System.out.println(partidasIniciadas + " Consultando partidas iniciadas.");
+			ArrayList<Partida> arrayPartidasIniciadas = serverManagaer.getPartidas();
+			System.out.println(arrayPartidasIniciadas);
 			
+			String partidasEmEspera = "PAR/" + null + "/" + false + "/" + null;
+			conecta.Envia(partidasEmEspera);
+			System.out.println(partidasIniciadas + " Consultando partidas em espera.");	
 			
 		} catch (Exception e) {
 			System.out.println(e);

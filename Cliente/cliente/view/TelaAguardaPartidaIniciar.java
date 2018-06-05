@@ -78,11 +78,12 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		JButton btnIniciarRodada = new JButton("Iniciar Rodada");
 		btnIniciarRodada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String aposta = JOptionPane.showInputDialog((Component) arg0.getSource(), "Qual sera o valor da aposta?");
 				int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
-				
-				System.out.println("Title is:" + aposta);
 				System.out.println("Aposta is:" + valorAposta);
+				
+				// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+				String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
+				conecta.Envia(apostar);
 			}
 		});
 		btnIniciarRodada.setFont(new Font("Tahoma", Font.BOLD, 11));
