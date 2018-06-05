@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import cliente.conection.ClientConexao;
+import server.model.Partida;
+import server.model.Usuario;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -70,6 +73,13 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		JButton btnIniciarRodada = new JButton("Iniciar Rodada");
 		btnIniciarRodada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				try {										
+					//Validar quantidade minima de usuarios
+					
+				} catch (Exception quantidadeUsuarioInsuficiente) {
+					System.err.println(quantidadeUsuarioInsuficiente);
+				}
+				
 				int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
 				System.out.println("Aposta is:" + valorAposta);
 				

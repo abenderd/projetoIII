@@ -14,8 +14,10 @@ public class SaldoDAO {
 			String sql = "SELECT saldo FROM tbl_usuario WHERE eMail = '" + email + "'";
 			Conexao.conexao.prepareStatement(sql);
 			MeuResultSet resultado = (MeuResultSet) Conexao.conexao.executeQuery();
-			if(resultado.first())
+			if(resultado.first()) {
+				System.out.println("SALDOOOOOOO " + Integer.parseInt(resultado.getString("saldo")));
 				return Integer.parseInt(resultado.getString("saldo"));
+			}
 			else
 				return -1;
 		} catch (Exception e) {

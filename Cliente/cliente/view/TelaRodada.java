@@ -50,7 +50,7 @@ public class TelaRodada extends JFrame {
 	@SuppressWarnings("unchecked")
 	public TelaRodada(ClientConexao conecta) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 500, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -70,15 +70,16 @@ public class TelaRodada extends JFrame {
 			}
 		});
 		btnComprarCartas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnComprarCartas.setBounds(301, 201, 123, 23);
+		btnComprarCartas.setBounds(351, 201, 123, 23);
 		contentPane.add(btnComprarCartas);
 		contentPane.setLayout(null);
 		
 		JTextPane txtpnA = new JTextPane();
+		txtpnA.setFont(new Font("Tahoma", Font.BOLD, 13));
 		txtpnA.setText("a1. ");
 		txtpnA.setEnabled(false);
 		txtpnA.setEditable(false);
-		txtpnA.setBounds(99, 49, 234, 112);
+		txtpnA.setBounds(62, 49, 352, 114);
 		contentPane.add(txtpnA);
 		
 		JLabel lblCartas = new JLabel("Cartas:");
@@ -95,7 +96,7 @@ public class TelaRodada extends JFrame {
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.BOLD, 11));
-		button.setBounds(158, 201, 123, 23);
+		button.setBounds(168, 201, 151, 23);
 		contentPane.add(button);
 	}
 }

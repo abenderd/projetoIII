@@ -7,19 +7,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import cliente.conection.ClientConexao;
-import server.main.ServerManager;
-import server.model.Partida;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
@@ -27,12 +22,6 @@ import javax.swing.DefaultListModel;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridLayout;
-import javax.swing.SpringLayout;
-import java.awt.CardLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 
@@ -46,7 +35,7 @@ public class TelaListaDePartida extends JFrame {
 	private JList listPartidasEmEspera;
 	private JList listPartidasIniciadas = new JList();
 	DefaultListModel listaEmEspera = new DefaultListModel();
-	ServerManager serverManagaer = new ServerManager();
+	public String nomePartidaIniciada;
 
 	/**
 	 * Launch the application.
@@ -77,7 +66,7 @@ public class TelaListaDePartida extends JFrame {
 		try {
 			conecta.recebe1Msg();
 		} catch (Exception e) {
-
+			System.err.println(e);
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 451, 350);
@@ -103,6 +92,8 @@ public class TelaListaDePartida extends JFrame {
 				// ou (ERR)
 				String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null;
 				conecta.Envia(entrarPartida);
+				
+				nomePartidaIniciada = nomePartida;
 
 				TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
 				telaAguardaPartidaIniciar.show();
@@ -130,25 +121,10 @@ public class TelaListaDePartida extends JFrame {
 
 						listaEmEspera.addElement(nomePartida);
 
-						// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
-						// ou (ERR)
-						String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null;
-						conecta.Envia(entrarPartida);
-
-						// CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou
-						// (EOP)
-						String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
-						conecta.Envia(partidasIniciadas);
-						
-						ArrayList<Partida> partidas = serverManagaer.getPartidas();
-						System.out.println(partidas);
-
-
 					} catch (Exception erroCriarPartida) {
 						JOptionPane.showMessageDialog((Component) e.getSource(), "Erro ao criar partida.");
 						System.out.println(erroCriarPartida);
 					}
-
 				}
 			}
 		});
@@ -264,4 +240,30 @@ public class TelaListaDePartida extends JFrame {
 			return arrayPartidasIniciadas.get(index);
 		}
 	}
+
+	public JList getListPartidasEmEspera() {
+		return listPartidasEmEspera;
+	}
+
+	public void setListPartidasEmEspera(JList listPartidasEmEspera) {
+		this.listPartidasEmEspera = listPartidasEmEspera;
+	}
+
+	public JList getListPartidasIniciadas() {
+		return listPartidasIniciadas;
+	}
+
+	public void setListPartidasIniciadas(JList listPartidasIniciadas) {
+		this.listPartidasIniciadas = listPartidasIniciadas;
+	}
+
+	public String getNomePartidaIniciada() {
+		return nomePartidaIniciada;
+	}
+
+	public void setNomePartidaIniciada(String nomePartidaIniciada) {
+		this.nomePartidaIniciada = nomePartidaIniciada;
+	}
+	
+	
 }

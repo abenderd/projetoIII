@@ -174,11 +174,12 @@ public class ServerManager {
 								String email = usuario.getEmail();
 								Float saldo = (float) saldoDAO.getSaldo(email);
 								Float aposta = Float.parseFloat(var2);
-
-								t.transmite(clienteSocket, "SUC/ / / ");
+								
 								if (saldo < aposta) {
 									t.transmite(clienteSocket, "ERR/ / / ");
 								}
+								
+								t.transmite(clienteSocket, "SUC/ / / ");
 							}
 							t.transmite(clienteSocket, "ERR/ / / ");
 							break;

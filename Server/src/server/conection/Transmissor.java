@@ -8,7 +8,7 @@ public class Transmissor {
 
 	public void transmite(Socket connection, String mensagem) {
 		try {
-			System.out.println("escrevendo " + mensagem);
+			System.out.println("Transmitindo " + mensagem);
 			OutputStreamWriter transmissor = new OutputStreamWriter(connection.getOutputStream());
 			transmissor.write(mensagem + "\n");
 			transmissor.flush();

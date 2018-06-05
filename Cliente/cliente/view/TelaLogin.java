@@ -27,6 +27,7 @@ public class TelaLogin extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldEmail;
 	private JPasswordField passwordField;
+	public String nomePessoaLogada;
 
 	/**
 	 * Launch the application.
@@ -165,4 +166,30 @@ public class TelaLogin extends JFrame {
 	public String toString() {
 		return "TelaLogin [textFieldEmail=" + textFieldEmail + ", passwordField=" + passwordField + "]";
 	}
+
+	public JTextField getTextFieldEmail() {
+		return textFieldEmail;
+	}
+
+	public void setTextFieldEmail(JTextField textFieldEmail) {
+		this.textFieldEmail = textFieldEmail;
+	}
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public void setPasswordField(JPasswordField passwordField) {
+		this.passwordField = passwordField;
+	}
+
+	public String getNomePessoaLogada() {
+		return nomePessoaLogada;
+	}
+
+	public void setNomePessoaLogada(String nomePessoaLogada) {
+		this.nomePessoaLogada = nomePessoaLogada;
+	}
+	
+	
 }

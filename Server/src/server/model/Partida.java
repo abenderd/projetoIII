@@ -12,7 +12,7 @@ public class Partida {
 	private int contadorCartas;
 	private ArrayList<Pote> pote;
 	private String nomePartida;
-	private boolean status; // false = Aguardando OU true = EmExecuçao
+	private boolean status; // false = Aguardando OU true = EmExecucao
 	private SaldoDAO saldo;
 
 	public Partida(String nomePartida, Usuario user) {
