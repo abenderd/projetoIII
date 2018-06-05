@@ -8,6 +8,7 @@ public class Transmissor {
 	public void transmite(Socket connection, String menssagem) {
 		try {
 			ObjectOutputStream transmissor = new ObjectOutputStream(connection.getOutputStream());
+			System.out.println("Transmitindo - " + menssagem);
 			transmissor.writeObject(menssagem);
 			transmissor.flush();
 			// transmissor.close();
