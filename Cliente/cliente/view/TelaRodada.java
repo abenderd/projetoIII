@@ -56,9 +56,9 @@ public class TelaRodada extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnFinalizarPartida = new JButton("Finalizar Partida");
+		JButton btnFinalizarPartida = new JButton("Desistir");
 		btnFinalizarPartida.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnFinalizarPartida.setBounds(24, 201, 123, 23);
+		btnFinalizarPartida.setBounds(10, 201, 123, 23);
 		contentPane.add(btnFinalizarPartida);
 		
 		JButton btnComprarCartas = new JButton("Comprar Cartas");
@@ -70,7 +70,7 @@ public class TelaRodada extends JFrame {
 			}
 		});
 		btnComprarCartas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnComprarCartas.setBounds(274, 201, 123, 23);
+		btnComprarCartas.setBounds(301, 201, 123, 23);
 		contentPane.add(btnComprarCartas);
 		contentPane.setLayout(null);
 		
@@ -85,5 +85,17 @@ public class TelaRodada extends JFrame {
 		lblCartas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCartas.setBounds(47, 11, 46, 14);
 		contentPane.add(lblCartas);
+		
+		JButton button = new JButton("Finalizar Partida");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
+				String apostar = "WIN/" + null + "/" + null + "/" + null;
+				conecta.Envia(apostar);
+			}
+		});
+		button.setFont(new Font("Tahoma", Font.BOLD, 11));
+		button.setBounds(158, 201, 123, 23);
+		contentPane.add(button);
 	}
 }

@@ -333,4 +333,7 @@ public class ServerManager {
 		return true;
 	}
 
+	public ArrayList<Partida> getPartidas() {
+		return partidas;
+	}
 }
