@@ -119,8 +119,6 @@ public class TelaListaDePartida extends JFrame {
 						JOptionPane.showMessageDialog((Component) e.getSource(),
 								"Partida " + nomePartida + " criada com sucesso.");
 						
-						
-						
 						listaEmEspera.addElement(nomePartida);
 
 						// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
@@ -133,8 +131,13 @@ public class TelaListaDePartida extends JFrame {
 						String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
 						conecta.Envia(partidasIniciadas);
 						ArrayList<String> bla = conecta.recebeNMsg("stop");
-						ArrayList<Partida> partidas = serverManagaer.getPartidas();
-						System.out.println(partidas);
+						System.out.println(bla);
+						
+						String partidasEmEspera = "PAR/" + null + "/" + false + "/" + null;
+						conecta.Envia(partidasEmEspera);
+						System.out.println(partidasIniciadas + " Consultando partidas em espera.");
+						ArrayList<String> consultaPartidasEmEspera = conecta.recebeNMsg("stop");
+						System.out.println(consultaPartidasEmEspera);
 						
 						TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
 						telaAguardaPartidaIniciar.show();
