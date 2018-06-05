@@ -168,8 +168,12 @@ public class ServerManager {
 								InputMismatchException erro = new InputMismatchException(
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
-							}
-							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
+							}else if(!partida.iniciaPartida()){
+								InputMismatchException erro = new InputMismatchException(
+										"(APO) Jogadores insulficientes para iniciar partida");
+								t.transmite(clienteSocket, "ERR/"+ erro + "/ / ");
+								throw erro;
+							}else if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
 								t.transmite(clienteSocket, "SUC/ / / ");
 							else
 							t.transmite(clienteSocket, "ERR/ / / ");

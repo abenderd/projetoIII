@@ -98,7 +98,7 @@ public class Partida {
 
 	public boolean iniciaPartida() {
 		if (status)
-			return false;
+			return true;
 		else if (usuarios.size() < 4)
 			return false;
 		else {
