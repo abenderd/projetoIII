@@ -1,6 +1,8 @@
 package server.main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,6 +12,7 @@ import java.util.InputMismatchException;
 import server.conection.Transmissor;
 import server.dao.CadastroDAO;
 import server.dao.CreditaConta;
+import server.dao.SaldoDAO;
 import server.dbo.CadastroDBO;
 import server.model.*;
 
@@ -58,14 +61,15 @@ public class ServerManager {
 			Partida partida = null;
 			try {
 				System.out.println("Recebido uma nova conexao (" + clienteSocket.getInetAddress() + ")");
-				ObjectInputStream server = new ObjectInputStream(clienteSocket.getInputStream());
+				BufferedReader server = new BufferedReader(new InputStreamReader(clienteSocket.getInputStream()));
 				String mensagem = "";
 				while (true) {
-					mensagem = String.valueOf(server.readObject());
+					mensagem = String.valueOf(server.readLine());
 					if (mensagem.toUpperCase().equals("FIM"))
 						break;
 					String[] temp;
 					String delimiter = "/";
+					SaldoDAO saldoDAO = new SaldoDAO();
 					temp = mensagem.split(delimiter);
 					try {
 						String var1 = temp[0];
@@ -108,14 +112,11 @@ public class ServerManager {
 								cad = cadDao.getUsuario(var2, var3);
 								System.out.println(cad.toString());
 								usuario = new Usuario(var3, var2, clienteSocket);
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								t.transmite(clienteSocket, var2 + "/" + e);
+								t.transmite(clienteSocket, cad.getNome() + " Logado com sucesso");
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
-								t.transmite(clienteSocket, var2 + "/" + e);
+								t.transmite(clienteSocket, cad.getNome() + " Logado com erro");
 							}
-							t.transmite(clienteSocket, cad.getNome() + " Logado com sucesso");
 							break;
 						case "CRI":
 							if (usuario.isAguardandoSaldo()) {
@@ -168,28 +169,29 @@ public class ServerManager {
 								InputMismatchException erro = new InputMismatchException(
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
-							}else if(!partida.iniciaPartida()){
-								InputMismatchException erro = new InputMismatchException(
-										"(APO) Jogadores insulficientes para iniciar partida");
-								t.transmite(clienteSocket, "ERR/"+ erro + "/ / ");
-								throw erro;
-							}else if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
+							}
+							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2))) {
+								String email = usuario.getEmail();
+								Float saldo = (float) saldoDAO.getSaldo(email);
+								Float aposta = Float.parseFloat(var2);
+
 								t.transmite(clienteSocket, "SUC/ / / ");
-							else
+								if (saldo < aposta) {
+									t.transmite(clienteSocket, "ERR/ / / ");
+								}
+							}
 							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "CAR":
-							if(!partida.iniciaPartida()){
+							usuario.setComprandoCartas(true);
+							if (partida == null) {
 								InputMismatchException erro = new InputMismatchException(
-										"(CAR) Jogadores insulficientes para iniciar partida");
-								t.transmite(clienteSocket, "ERR/"+ erro + "/ / ");
+										"(CAR) Voce precisa estar em uma partida para solicitar cartas");
 								throw erro;
-							}else{
-								usuario.setComprandoCartas(true);
-								for (int x = 0; x < 2; x++) {
-									Carta c = partida.getCarta(usuario.getEmail());
-									t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
-								}
+							}
+							for (int x = 0; x < 2; x++) {
+								Carta c = partida.getCarta(usuario.getEmail());
+								t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
 							}
 							break;
 						case "COM":
@@ -218,7 +220,7 @@ public class ServerManager {
 								ArrayList<Usuario> usuarios = partida.getUsuarios();
 								ArrayList<Usuario> ganhadores = new ArrayList<Usuario>();
 								ArrayList<Usuario> perdedores = new ArrayList<Usuario>();
-								int valorPote = partida.getValorPorte();
+								float valorPote = partida.getValorPorte();
 								// ganhadores.add(usuarios.remove(0));
 								while (usuarios.size() > 0) {
 									Usuario atual = usuarios.remove(0);
@@ -278,8 +280,6 @@ public class ServerManager {
 				// receptor.close();
 			} catch (NullPointerException e) {
 				System.err.println("ServerManager - Null Pointer (Usuario Desconhecido?) - " + e);
-			} catch (ClassNotFoundException e) {
-				System.err.println("ServerManager - server.readObject (ClassNotFoundException) - " + e);
 			} catch (IOException e) {
 				try {
 					System.err.println(
@@ -339,4 +339,13 @@ public class ServerManager {
 			return false;
 		return true;
 	}
+
+	public ArrayList<Partida> getPartidas() {
+		return partidas;
+	}
+
+	public void setPartidas(ArrayList<Partida> partidas) {
+		this.partidas = partidas;
+	}
+
 }

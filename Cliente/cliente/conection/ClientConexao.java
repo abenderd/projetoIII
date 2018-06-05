@@ -1,8 +1,11 @@
 package cliente.conection;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -12,8 +15,8 @@ import javax.swing.JOptionPane;
 public class ClientConexao {
 	private Socket connection;
 	private String ip;
-	private ObjectInputStream server;
-	private ObjectOutputStream transmissor;
+	private BufferedReader server;
+	private OutputStreamWriter transmissor;
 	// (COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
 	// CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
 	// JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
@@ -45,10 +48,9 @@ public class ClientConexao {
 	public void Envia(String mensagem) {
 		try {
 			if (transmissor == null)
-				transmissor = new ObjectOutputStream(connection.getOutputStream());
-			transmissor.writeObject(mensagem);
+				transmissor = new OutputStreamWriter(connection.getOutputStream());
+			transmissor.write(mensagem + "\n");
 			transmissor.flush();
-			server = null;
 			System.out.println("Enviado - " + mensagem);
 		} catch (Exception erro) {
 			System.err.println("ClientConexao - Envia - " + erro.getMessage());
@@ -59,8 +61,8 @@ public class ClientConexao {
 		try {
 			String mensagem;
 			if (server == null)
-				server = new ObjectInputStream(connection.getInputStream());
-			mensagem = String.valueOf(server.readObject());
+				server = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			mensagem = String.valueOf(server.readLine());
 			return mensagem;
 		} catch (Exception erro) {
 			throw new Exception("ClientConexao - recebe1Msg - " + erro.getMessage());
@@ -72,10 +74,10 @@ public class ClientConexao {
 			ArrayList<String> msgs = new ArrayList<String>();
 			String mensagem = null;
 			if (server == null)
-				server = new ObjectInputStream(connection.getInputStream());
+				server = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			while (true) {
-				mensagem = String.valueOf(server.readObject());
-				if (!mensagem.equals(CondParada))
+				mensagem = String.valueOf(server.readLine());
+				if (mensagem.equals(CondParada))
 					break;
 				System.out.println("Recebido mensagem - " + mensagem);
 				msgs.add(mensagem);
