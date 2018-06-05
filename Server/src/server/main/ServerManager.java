@@ -19,14 +19,14 @@ public class ServerManager {
 	private ArrayList<Partida> partidas;
 	private Transmissor t;
 	private ServerSocket receptor;
-	
-	public ServerManager(){
+
+	public ServerManager() {
 		clientOutputStreams = new ArrayList();
 		partidas = new ArrayList();
 		t = new Transmissor();
 		go();
 	}
-	
+
 	private void go() {
 		// Guarda os clientes
 		try {
@@ -47,11 +47,11 @@ public class ServerManager {
 	// Cuida das conexoes com novos clientes
 	private class ClientHandler implements Runnable {
 		private Socket clienteSocket;
-		
-		public ClientHandler(Socket socket){
+
+		public ClientHandler(Socket socket) {
 			this.clienteSocket = socket;
 		}
-		
+
 		@Override
 		public void run() {
 			Usuario usuario = null;
@@ -78,19 +78,22 @@ public class ServerManager {
 
 						System.out.println(var1 + "/" + var2 + "/" + var3 + "/" + var4);
 
-						//(COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
-						//CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
-						//JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
-						//CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-						//CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou (EOP)
-						//ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL) ou (ERR)
-						//APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-						//DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL) + (CAR/NAIPE/VALOR/NULL)
-						//COMPRAR CARTAS - (COM/NULL/NULL/NULL) - (CAR/NAIPE/VALOR/NULL) +? OU (EOC)
-						//DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
-						//SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
-						//SEM SALDO - (SAL/MENSSAGEM/NULL/NULL)
-						
+						// (COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
+						// CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
+						// JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
+						// CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+						// CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou
+						// (EOP)
+						// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
+						// ou (ERR)
+						// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+						// DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL) +
+						// (CAR/NAIPE/VALOR/NULL)
+						// COMPRAR CARTAS - (COM/NULL/NULL/NULL) - (CAR/NAIPE/VALOR/NULL) +? OU (EOC)
+						// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
+						// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
+						// SEM SALDO - (SAL/MENSSAGEM/NULL/NULL)
+
 						switch (var1) {
 						case "CAD":
 							try {
@@ -115,18 +118,18 @@ public class ServerManager {
 							t.transmite(clienteSocket, cad.getNome() + " Logado com sucesso");
 							break;
 						case "CRI":
-							if(usuario.isAguardandoSaldo()){
+							if (usuario.isAguardandoSaldo()) {
 								t.transmite(clienteSocket, "ERR/ / / ");
-							}else{
+							} else {
 								boolean repetido = false;
-								for(int count = 0;count < partidas.size();count ++){
-									if(var2.equals(partidas.get(count).getNomePartida())){
+								for (int count = 0; count < partidas.size(); count++) {
+									if (var2.equals(partidas.get(count).getNomePartida())) {
 										t.transmite(clienteSocket, "ERR/ / / ");
 										repetido = true;
 										break;
 									}
 								}
-								if(!repetido){
+								if (!repetido) {
 									Partida nova = new Partida(var2, usuario);
 									partidas.add(nova);
 									partida = nova;
@@ -135,96 +138,106 @@ public class ServerManager {
 							}
 							break;
 						case "PAR":
-							for(int x=0;x<partidas.size();x++){
-								t.transmite(clienteSocket, "PAR/"+ partidas.get(x).getNomePartida() + "/" + partidas.get(x).getStatus() + "/ ");
+							for (int x = 0; x < partidas.size(); x++) {
+								t.transmite(clienteSocket, "PAR/" + partidas.get(x).getNomePartida() + "/"
+										+ partidas.get(x).getStatus() + "/ ");
 							}
-							t.transmite(clienteSocket,"EOP/ / / ");
+							t.transmite(clienteSocket, "EOP/ / / ");
 							break;
 						case "ENT":
-							if(usuario.isAguardandoSaldo()){
+							if (usuario.isAguardandoSaldo()) {
 								t.transmite(clienteSocket, "ERR/ / / ");
-							}else{
+							} else {
 								boolean success = false;
-								for(int x=0;x<partidas.size();x++){
-									if(partidas.get(x).getNomePartida().equals(var2)){
+								for (int x = 0; x < partidas.size(); x++) {
+									if (partidas.get(x).getNomePartida().equals(var2)) {
 										partidas.get(x).addUsuario(usuario);
 										partida = partidas.get(x);
 										success = true;
 										break;
 									}
 								}
-								if(success)
-									t.transmite(clienteSocket, "SUC/"+ usuario.getSaldo() +"/ / ");
+								if (success)
+									t.transmite(clienteSocket, "SUC/" + usuario.getSaldo() + "/ / ");
 								else
 									t.transmite(clienteSocket, "ERR/ / / ");
 							}
 							break;
 						case "APO":
-							if(partida == null){
-								InputMismatchException erro = new InputMismatchException("(APO) Voce precisa estar em uma partida para apostar");
+							if (partida == null) {
+								InputMismatchException erro = new InputMismatchException(
+										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
 							}
-							if(partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
+							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2)))
 								t.transmite(clienteSocket, "SUC/ / / ");
 							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "CAR":
 							usuario.setComprandoCartas(true);
-							if(partida == null){
-								InputMismatchException erro = new InputMismatchException("(CAR) Voce precisa estar em uma partida para solicitar cartas");
+							if (partida == null) {
+								InputMismatchException erro = new InputMismatchException(
+										"(CAR) Voce precisa estar em uma partida para solicitar cartas");
 								throw erro;
 							}
-							for(int x=0;x<2;x++){
+							for (int x = 0; x < 2; x++) {
 								Carta c = partida.getCarta(usuario.getEmail());
-								t.transmite(clienteSocket, "CAR/"+ c.getNipe() +"/"+ c.getValor() +"/ ");
+								t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
 							}
 							break;
 						case "COM":
-							if(partida == null){
-								InputMismatchException erro = new InputMismatchException("(COM) Voce precisa estar em uma partida para solicitar cartas");
+							if (partida == null) {
+								InputMismatchException erro = new InputMismatchException(
+										"(COM) Voce precisa estar em uma partida para solicitar cartas");
 								throw erro;
 							}
 							usuario.setComprandoCartas(true);
 							Carta c = partida.getCarta(usuario.getEmail());
-							t.transmite(clienteSocket, "CAR/"+ c.getNipe() +"/"+ c.getValor() +"/ ");
+							t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
 							break;
-						case "EOC": //ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
-							if(partida == null){
-								InputMismatchException erro = new InputMismatchException("(EOC) Voce precisa estar em uma partida para cancelar");
+						case "EOC": // ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
+							if (partida == null) {
+								InputMismatchException erro = new InputMismatchException(
+										"(EOC) Voce precisa estar em uma partida para cancelar");
 								throw erro;
 							}
-							if(!usuario.isComprandoCartas()){
-								InputMismatchException erro = new InputMismatchException("(EOC) Voce precisa estar comprando cartas para cancelar");
+							if (!usuario.isComprandoCartas()) {
+								InputMismatchException erro = new InputMismatchException(
+										"(EOC) Voce precisa estar comprando cartas para cancelar");
 								throw erro;
 							}
 							usuario.setComprandoCartas(false);
-							if(partida.fimRodada()){ //VERIFICA SE RODADA ACABOU, SE SIM ENVIA WIN
+							if (partida.fimRodada()) { // VERIFICA SE RODADA ACABOU, SE SIM ENVIA WIN
 								ArrayList<Usuario> usuarios = partida.getUsuarios();
 								ArrayList<Usuario> ganhadores = new ArrayList<Usuario>();
 								ArrayList<Usuario> perdedores = new ArrayList<Usuario>();
 								int valorPote = partida.getValorPorte();
-								//ganhadores.add(usuarios.remove(0));
-								while(usuarios.size() > 0){
+								// ganhadores.add(usuarios.remove(0));
+								while (usuarios.size() > 0) {
 									Usuario atual = usuarios.remove(0);
-									if(atual.getValorMao()>21)
+									if (atual.getValorMao() > 21)
 										perdedores.add(atual);
-									else if(ganhadores.size() > 0 && (atual.getValorMao() > ganhadores.get(0).getValorMao())){
-										while(ganhadores.size() > 0){
+									else if (ganhadores.size() > 0
+											&& (atual.getValorMao() > ganhadores.get(0).getValorMao())) {
+										while (ganhadores.size() > 0) {
 											perdedores.add(ganhadores.remove(0));
 										}
 										ganhadores.add(atual);
-									}else
+									} else
 										ganhadores.add(atual);
 								}
-								//AVISA GANHADORES
+								// AVISA GANHADORES
 								valorPote = (valorPote / ganhadores.size());
-								for(int x=0; x < ganhadores.size(); x++){
-									t.transmite(ganhadores.get(x).getClienteSocket(), "WIN/"+ ganhadores.get(x).getNome() +"/"+ ganhadores.get(x).getEmail() +"/ ");
+								for (int x = 0; x < ganhadores.size(); x++) {
+									t.transmite(ganhadores.get(x).getClienteSocket(), "WIN/"
+											+ ganhadores.get(x).getNome() + "/" + ganhadores.get(x).getEmail() + "/ ");
 									ganhadores.get(x).setSaldo(valorPote);
-									t.transmite(ganhadores.get(x).getClienteSocket(), "EOW/"+ ganhadores.get(x).getSaldo() +"/ / ");
+									t.transmite(ganhadores.get(x).getClienteSocket(),
+											"EOW/" + ganhadores.get(x).getSaldo() + "/ / ");
 								}
-								for(int x=0; x < perdedores.size(); x++){
-									t.transmite(perdedores.get(x).getClienteSocket(), "EOW/"+ perdedores.get(x).getSaldo() +"/ / ");
+								for (int x = 0; x < perdedores.size(); x++) {
+									t.transmite(perdedores.get(x).getClienteSocket(),
+											"EOW/" + perdedores.get(x).getSaldo() + "/ / ");
 								}
 							}
 							break;
@@ -234,9 +247,9 @@ public class ServerManager {
 							break;
 						default:
 							t.transmite(clienteSocket, var1 + " - MENSSAGEM INVALIDA");
-							break;				
+							break;
 						}
-					}catch (InputMismatchException e) {
+					} catch (InputMismatchException e) {
 						t.transmite(clienteSocket, "ERRO - " + e);
 						System.err.println("ERRO - " + clienteSocket.toString() + " - " + e);
 					} catch (Exception e) {
@@ -244,12 +257,12 @@ public class ServerManager {
 						System.err.println("Menssagem invalida de: " + clienteSocket.toString() + " - " + e);
 					}
 				}
-				//VERIFICA SE TEM MOEDAS PARA CONTINUAR JOGADONDO
-				if(usuario.getSaldo()<=0){
+				// VERIFICA SE TEM MOEDAS PARA CONTINUAR JOGADONDO
+				if (usuario.getSaldo() <= 0) {
 					t.transmite(clienteSocket, "SAL/Voce esta sem saldo, aguarde para jogar/ / ");
-					if(!usuario.isAguardandoSaldo()){
+					if (!usuario.isAguardandoSaldo()) {
 						usuario.setAguardandoSaldo(true);
-						//PROGRAMA
+						// PROGRAMA
 						Thread t = new Thread(new CreditaConta(usuario));
 						t.start();
 					}
@@ -262,17 +275,18 @@ public class ServerManager {
 				System.err.println("ServerManager - server.readObject (ClassNotFoundException) - " + e);
 			} catch (IOException e) {
 				try {
-					System.err.println("ServerManager - ObjectInputStream (Usuario " + clienteSocket.getLocalAddress() + " Saiu)");
-					if(partida != null)
-					encerraPartida(partida, clienteSocket, usuario);
+					System.err.println(
+							"ServerManager - ObjectInputStream (Usuario " + clienteSocket.getLocalAddress() + " Saiu)");
+					if (partida != null)
+						encerraPartida(partida, clienteSocket, usuario);
 				} catch (IOException f) {
 					System.err.println("ServerManager - Erro ao retirar usuario da partida apos sair - " + f);
 				}
 			}
 		}
 	}
-	
-	public void encerraPartida(Partida partida, Socket socket, Usuario usuario) throws IOException{
+
+	public void encerraPartida(Partida partida, Socket socket, Usuario usuario) throws IOException {
 		partida.removeUsuario(usuario.getEmail());
 		socket.close();
 	}
@@ -318,5 +332,15 @@ public class ServerManager {
 			return false;
 		return true;
 	}
+
+	public ArrayList<Partida> getPartidas() {
+		return partidas;
+	}
+
+	public void setPartidas(ArrayList<Partida> partidas) {
+		this.partidas = partidas;
+	}
 	
+	
+
 }

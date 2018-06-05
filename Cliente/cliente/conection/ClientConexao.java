@@ -14,26 +14,29 @@ public class ClientConexao {
 	private String ip;
 	private ObjectInputStream server;
 	private ObjectOutputStream transmissor;
-	//(COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
-	//CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
-	//JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
-	//CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-	//CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou (EOP)
-	//ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL) ou (ERR)
-	//APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-	//DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL) + (CAR/NAIPE/VALOR/NULL)
-	//COMPRAR CARTAS - (COM/NULL/NULL/NULL) - (CAR/NAIPE/VALOR/NULL) +? OU (EOC)
-	//DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
-	//SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
+	// (COMANDO/COMPLEMENTO1/COMPLEMENTO2/COMPLEMENTO3)
+	// CADASTRAR JOGADOR - (CAD/EMAIL/NOME/SENHA) - RESPOSTA (SUC) ou (ERR)
+	// JOGAR JOGADOR - (LOG/EMAIL/SENHA/NULL) - RESPOSTA (SUC) ou (ERR)
+	// CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+	// CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou
+	// (EOP)
+	// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
+	// ou (ERR)
+	// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+	// DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL) +
+	// (CAR/NAIPE/VALOR/NULL)
+	// COMPRAR CARTAS - (COM/NULL/NULL/NULL) - (CAR/NAIPE/VALOR/NULL) +? OU (EOC)
+	// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
+	// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
 
 	public ClientConexao(String ip) throws UnknownHostException, IOException {
 		this.ip = ip;
 		abreConexao();
-		//Thread t = new Thread(new ClientRecebe(connection));
-		//t.start();
+		// Thread t = new Thread(new ClientRecebe(connection));
+		// t.start();
 	}
-	
-	public void abreConexao() throws UnknownHostException, IOException{
+
+	public void abreConexao() throws UnknownHostException, IOException {
 		this.connection = new Socket(ip, 11111);
 		server = null;
 		transmissor = null;
@@ -41,22 +44,21 @@ public class ClientConexao {
 
 	public void Envia(String mensagem) {
 		try {
-			if(transmissor == null)
+			if (transmissor == null)
 				transmissor = new ObjectOutputStream(connection.getOutputStream());
 			transmissor.writeObject(mensagem);
 			transmissor.flush();
 			server = null;
 			System.out.println("Enviado - " + mensagem);
-			JOptionPane.showMessageDialog(null, recebe1Msg());
 		} catch (Exception erro) {
 			System.err.println("ClientConexao - Envia - " + erro.getMessage());
 		}
 	}
-	
-	public String recebe1Msg() throws Exception{
+
+	public String recebe1Msg() throws Exception {
 		try {
 			String mensagem;
-			if(server == null)
+			if (server == null)
 				server = new ObjectInputStream(connection.getInputStream());
 			mensagem = String.valueOf(server.readObject());
 			return mensagem;
@@ -64,16 +66,16 @@ public class ClientConexao {
 			throw new Exception("ClientConexao - recebe1Msg - " + erro.getMessage());
 		}
 	}
-	
-	public ArrayList<String> recebeNMsg(String CondParada) throws Exception{ //recebe msg até parar
+
+	public ArrayList<String> recebeNMsg(String CondParada) throws Exception { // recebe msg ate parar
 		try {
 			ArrayList<String> msgs = new ArrayList<String>();
 			String mensagem = null;
-			if(server == null)
+			if (server == null)
 				server = new ObjectInputStream(connection.getInputStream());
-			while(true){
+			while (true) {
 				mensagem = String.valueOf(server.readObject());
-				if(!mensagem.equals(CondParada))
+				if (!mensagem.equals(CondParada))
 					break;
 				System.out.println("Recebido menssagem - " + mensagem);
 				msgs.add(mensagem);
