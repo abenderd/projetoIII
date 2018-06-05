@@ -52,10 +52,10 @@ public class TelaListaDePartida extends JFrame {
 	public void create(ClientConexao conecta) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {					
+				try {
 					TelaListaDePartida frame = new TelaListaDePartida(conecta);
 					frame.setVisible(true);
-					
+
 					consultarPartidas(conecta);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -107,9 +107,9 @@ public class TelaListaDePartida extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nomePartida = JOptionPane.showInputDialog((Component) e.getSource(),
 						"Qual sera o nome da partida?");
-				
+
 				listPartidasEmEspera.setModel(listaEmEspera);
-				
+
 				if (nomePartida != null && !nomePartida.equals("")) {
 					try {
 						// CRIAR PARTIDA - (CRI/NOME/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
@@ -118,24 +118,21 @@ public class TelaListaDePartida extends JFrame {
 
 						JOptionPane.showMessageDialog((Component) e.getSource(),
 								"Partida " + nomePartida + " criada com sucesso.");
-						
-						
-						
+
 						listaEmEspera.addElement(nomePartida);
 
 						// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
 						// ou (ERR)
 						String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null;
 						conecta.Envia(entrarPartida);
-						
+
 						// CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou
 						// (EOP)
 						String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
 						conecta.Envia(partidasIniciadas);
-						ArrayList<String> bla = conecta.recebeNMsg("stop");
-						ArrayList<Partida> partidas = serverManagaer.getPartidas();
-						System.out.println(partidas);
-						
+						ArrayList<String> consultaPartidasEmEspera = conecta.recebeNMsg("stop");
+						System.out.println(consultaPartidasEmEspera);
+
 						TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
 						telaAguardaPartidaIniciar.show();
 						dispose();
@@ -159,7 +156,6 @@ public class TelaListaDePartida extends JFrame {
 		lblPartidasEmEspera.setBounds(206, 11, 212, 35);
 		lblPartidasEmEspera.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		
 		listPartidasIniciadas.addContainerListener(new ContainerAdapter() {
 			@Override
 			public void componentAdded(ContainerEvent arg0) {
@@ -193,27 +189,25 @@ public class TelaListaDePartida extends JFrame {
 			String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
 			conecta.Envia(partidasIniciadas);
 			System.out.println(partidasIniciadas + " Consultando partidas iniciadas.");
-			ArrayList<Partida> arrayPartidasIniciadas = serverManagaer.getPartidas();
-			System.out.println(arrayPartidasIniciadas);
-			
+
 			String partidasEmEspera = "PAR/" + null + "/" + false + "/" + null;
 			conecta.Envia(partidasEmEspera);
-			System.out.println(partidasIniciadas + " Consultando partidas em espera.");	
-			
+			System.out.println(partidasIniciadas + " Consultando partidas em espera.");
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
 	}
-	
+
 	private class PartidasModel extends AbstractListModel {
-		
+
 		ArrayList<Partida> arrayPartidasIniciadas;
-		
+
 		public PartidasModel() {
-			arrayPartidasIniciadas = serverManagaer.getPartidas();
+			//arrayPartidasIniciadas = serverManagaer.getPartidas();
 		}
-		
+
 		public int getSize() {
 			return arrayPartidasIniciadas.size();
 		}

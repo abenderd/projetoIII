@@ -339,8 +339,4 @@ public class ServerManager {
 			return false;
 		return true;
 	}
-
-	public ArrayList<Partida> getPartidas() {
-		return partidas;
-	}
 }
