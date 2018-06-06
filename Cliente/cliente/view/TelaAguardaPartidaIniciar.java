@@ -75,22 +75,18 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {										
 					//Validar quantidade minima de usuarios
+					int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
+					System.out.println("Aposta is:" + valorAposta);
+					
+					// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
+					String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
+					conecta.Envia(apostar);
 					
 				} catch (Exception quantidadeUsuarioInsuficiente) {
 					System.err.println(quantidadeUsuarioInsuficiente);
 				}
 				
-				int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
-				System.out.println("Aposta is:" + valorAposta);
 				
-				// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
-				String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
-				conecta.Envia(apostar);
-				
-								
-				TelaRodada telaRodada = new TelaRodada(conecta);
-				telaRodada.show();
-				dispose();
 			}
 		});
 		btnIniciarRodada.setFont(new Font("Tahoma", Font.BOLD, 11));
