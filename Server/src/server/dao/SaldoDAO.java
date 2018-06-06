@@ -28,7 +28,8 @@ public class SaldoDAO {
 		try {
 			String sql = "UPDATE tbl_usuario SET saldo =" + valor + " WHERE eMail = '" + email + "'";
 			Conexao.conexao.prepareStatement(sql);
-			MeuResultSet resultado = (MeuResultSet) Conexao.conexao.executeQuery();
+			Conexao.conexao.executeUpdate();
+			Conexao.conexao.commit();
 		} catch (Exception e) {
 			System.err.println("Erro para setar Saldo - SaldoDAO setSaldo - " + e);
 		}

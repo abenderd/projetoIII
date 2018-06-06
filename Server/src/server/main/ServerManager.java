@@ -173,18 +173,15 @@ public class ServerManager {
 								throw erro;
 							} else if(!partida.iniciaPartida()){
 								t.transmite(clienteSocket, "ERR/Numero de jogadores insulficiente/ / ");
-							}
-							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2))) {
+							} else if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2))) {
 								String email = usuario.getEmail();
 								Float saldo = (float) saldoDAO.getSaldo(email);
 								Float aposta = Float.parseFloat(var2);
-								
 								if (saldo < aposta) {
 									t.transmite(clienteSocket, "ERR/ / / ");
-								}
-								
+								}else
 								t.transmite(clienteSocket, "SUC/ / / ");
-							}
+							}else
 							t.transmite(clienteSocket, "ERR/ / / ");
 							break;
 						case "CAR":
