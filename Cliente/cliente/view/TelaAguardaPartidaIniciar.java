@@ -13,6 +13,7 @@ import server.model.Usuario;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,7 +35,7 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	
+
 	public void create(ClientConexao conecta) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -59,7 +60,7 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JButton btnSair = new JButton("Sair");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -69,35 +70,36 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		btnSair.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnSair.setBounds(33, 172, 117, 23);
 		contentPane.add(btnSair);
-		
+
 		JButton btnIniciarRodada = new JButton("Iniciar Rodada");
 		btnIniciarRodada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {										
-					//Validar quantidade minima de usuarios
+				try {
+					// Validar quantidade minima de usuarios
 					int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
 					System.out.println("Aposta is:" + valorAposta);
-					
+
 					// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
 					String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
 					conecta.Envia(apostar);
-					
+					conecta.recebeNMsg("SUC/ / / ").stream().map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+
 				} catch (Exception quantidadeUsuarioInsuficiente) {
 					System.err.println(quantidadeUsuarioInsuficiente);
-				}				
+				}
 			}
 		});
 		btnIniciarRodada.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnIniciarRodada.setBounds(193, 172, 117, 23);
 		contentPane.add(btnIniciarRodada);
-		
+
 		JTextPane txtpnARodadaPoder = new JTextPane();
 		txtpnARodadaPoder.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		txtpnARodadaPoder.setEditable(false);
 		txtpnARodadaPoder.setText("A rodada podera ser iniciada quando houver no minimo 3 jogadores.");
 		txtpnARodadaPoder.setBounds(33, 70, 277, 74);
 		contentPane.add(txtpnARodadaPoder);
-		
+
 		JLabel label = new JLabel("");
 		label.setBounds(33, 11, 46, 14);
 		contentPane.add(label);

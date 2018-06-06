@@ -172,7 +172,7 @@ public class ServerManager {
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
 							} else if(!partida.iniciaPartida()){
-								t.transmite(clienteSocket, "ERR/Numero de jogadores insulficiente/ / ");
+								t.transmite(clienteSocket, "ERR/Numero de jogadores insuficiente/ / ");
 							} else if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2))) {
 								String email = usuario.getEmail();
 								Float saldo = (float) saldoDAO.getSaldo(email);
