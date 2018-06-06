@@ -120,6 +120,10 @@ public class TelaListaDePartida extends JFrame {
 								"Partida " + nomePartida + " criada com sucesso.");
 
 						listaEmEspera.addElement(nomePartida);
+						
+						TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
+						telaAguardaPartidaIniciar.show();
+						dispose();
 
 					} catch (Exception erroCriarPartida) {
 						JOptionPane.showMessageDialog((Component) e.getSource(), "Erro ao criar partida.");

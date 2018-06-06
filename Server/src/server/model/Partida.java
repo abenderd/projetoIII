@@ -72,7 +72,7 @@ public class Partida {
 	}
 
 	private void geraCartas() {
-		for (int x = 0; x < 53; x++) {
+		for (int x = 0; x < 13; x++) {
 			for (int y = 1; y < 5; y++) {
 				Carta novaCarta = new Carta(x, y);
 				baralho.add(novaCarta);

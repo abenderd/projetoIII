@@ -84,9 +84,7 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 					
 				} catch (Exception quantidadeUsuarioInsuficiente) {
 					System.err.println(quantidadeUsuarioInsuficiente);
-				}
-				
-				
+				}				
 			}
 		});
 		btnIniciarRodada.setFont(new Font("Tahoma", Font.BOLD, 11));
