@@ -120,7 +120,9 @@ public class ServerManager {
 							break;
 						case "CRI":
 							if (usuario.isAguardandoSaldo()) {
-								t.transmite(clienteSocket, "ERR/ / / ");
+								t.transmite(clienteSocket, "ERR/Sem saldo/ / ");
+							} else if(partida != null){
+								t.transmite(clienteSocket, "ERR/Voce ja esta em uma partida/ / ");
 							} else {
 								boolean repetido = false;
 								for (int count = 0; count < partidas.size(); count++) {
@@ -169,6 +171,8 @@ public class ServerManager {
 								InputMismatchException erro = new InputMismatchException(
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
+							} else if(!partida.iniciaPartida()){
+								t.transmite(clienteSocket, "ERR/Numero de jogadores insulficiente/ / ");
 							}
 							if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2))) {
 								String email = usuario.getEmail();
@@ -262,6 +266,9 @@ public class ServerManager {
 					} catch (InputMismatchException e) {
 						t.transmite(clienteSocket, "ERRO - " + e);
 						System.err.println("ERRO - " + clienteSocket.toString() + " - " + e);
+					} catch (ArrayIndexOutOfBoundsException e) {
+						System.err.println("Usuario saiu - " + clienteSocket.toString() + " - " + e);
+						break;
 					} catch (Exception e) {
 						t.transmite(clienteSocket, "MENSSAGEM INVALIDA " + e);
 						System.err.println("Menssagem invalida de: " + clienteSocket.toString() + " - " + e);
