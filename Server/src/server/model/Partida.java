@@ -99,7 +99,7 @@ public class Partida {
 	public boolean iniciaPartida() {
 		if (status)
 			return true;
-		else if (usuarios.size() < 3)
+		else if (usuarios.size() < 2)
 			return false;
 		else {
 			status = true;

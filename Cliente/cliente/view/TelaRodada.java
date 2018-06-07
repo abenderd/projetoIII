@@ -49,6 +49,14 @@ public class TelaRodada extends JFrame {
 	 */
 	@SuppressWarnings("unchecked")
 	public TelaRodada(ClientConexao conecta) {
+		try {
+			// DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL)
+			String recebeCartasIniciais = "CAR" + null + "/" + null + "/" + null;
+			conecta.Envia(recebeCartasIniciais);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 300);
 		contentPane = new JPanel();
@@ -57,6 +65,13 @@ public class TelaRodada extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnFinalizarPartida = new JButton("Desistir");
+		btnFinalizarPartida.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
+				String apostar = "SAI/" + null + "/" + null + "/" + null;
+				conecta.Envia(apostar);
+			}
+		});
 		btnFinalizarPartida.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnFinalizarPartida.setBounds(10, 201, 123, 23);
 		contentPane.add(btnFinalizarPartida);

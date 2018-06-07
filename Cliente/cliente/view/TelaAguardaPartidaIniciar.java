@@ -13,6 +13,7 @@ import server.model.Usuario;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -64,6 +65,10 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		JButton btnSair = new JButton("Sair");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
+				String apostar = "SAI/" + null + "/" + null + "/" + null;
+				conecta.Envia(apostar);
+
 				System.exit(0);
 			}
 		});
@@ -75,14 +80,29 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		btnIniciarRodada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					// Validar quantidade minima de usuarios
 					int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
 					System.out.println("Aposta is:" + valorAposta);
 
 					// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
 					String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
 					conecta.Envia(apostar);
-					conecta.recebeNMsg("SUC/ / / ").stream().map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+
+					// Validar quantidade minima de usuarios
+					List<String> mensagensErros = conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ")
+							.stream().map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+
+					System.out.println("Mensagem do recebe N Msg " + mensagensErros);
+
+					if (mensagensErros.contains("Numero de jogadores insuficiente")) {
+						JOptionPane.showMessageDialog(null,
+								"Numero de jogares insuficiente, aguarde no minimo tres jogadores.");
+						mensagensErros.clear();
+						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
+					}
+
+					TelaRodada telaRodada = new TelaRodada(conecta);
+					telaRodada.show();
+					dispose();
 
 				} catch (Exception quantidadeUsuarioInsuficiente) {
 					System.err.println(quantidadeUsuarioInsuficiente);
@@ -104,4 +124,5 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 		label.setBounds(33, 11, 46, 14);
 		contentPane.add(label);
 	}
+
 }

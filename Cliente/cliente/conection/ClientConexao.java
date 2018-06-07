@@ -77,8 +77,12 @@ public class ClientConexao {
 				server = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			while (true) {
 				mensagem = String.valueOf(server.readLine());
-				if (mensagem.equals(CondParada))
+				System.out.println("Mensagens debug " + mensagem);
+				if (mensagem.equals(CondParada)) {
+					mensagem = CondParada;
+					msgs.add(mensagem);
 					break;
+				}
 				System.out.println("Recebido mensagem - " + mensagem);
 				msgs.add(mensagem);
 			}

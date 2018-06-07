@@ -78,7 +78,9 @@ public class TelaListaDePartida extends JFrame {
 		btnSair.setBounds(11, 270, 105, 30);
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
+				String apostar = "SAI/" + null + "/" + null + "/" + null;
+				conecta.Envia(apostar);
 			}
 		});
 		btnSair.setFont(new Font("Tahoma", Font.BOLD, 11));

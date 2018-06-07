@@ -121,7 +121,7 @@ public class ServerManager {
 						case "CRI":
 							if (usuario.isAguardandoSaldo()) {
 								t.transmite(clienteSocket, "ERR/Sem saldo/ / ");
-							} else if(partida != null){
+							} else if (partida != null) {
 								t.transmite(clienteSocket, "ERR/Voce ja esta em uma partida/ / ");
 							} else {
 								boolean repetido = false;
@@ -171,18 +171,18 @@ public class ServerManager {
 								InputMismatchException erro = new InputMismatchException(
 										"(APO) Voce precisa estar em uma partida para apostar");
 								throw erro;
-							} else if(!partida.iniciaPartida()){
+							} else if (!partida.iniciaPartida()) {
 								t.transmite(clienteSocket, "ERR/Numero de jogadores insuficiente/ / ");
 							} else if (partida.Apostar(usuario.getEmail(), Integer.parseInt(var2))) {
 								String email = usuario.getEmail();
 								Float saldo = (float) saldoDAO.getSaldo(email);
 								Float aposta = Float.parseFloat(var2);
 								if (saldo < aposta) {
-									t.transmite(clienteSocket, "ERR/ / / ");
-								}else
-								t.transmite(clienteSocket, "SUC/ / / ");
-							}else
-							t.transmite(clienteSocket, "ERR/ / / ");
+									t.transmite(clienteSocket, "ERR/Saldo insuficiente/ / ");
+								} else
+									t.transmite(clienteSocket, "SUC/ / / ");
+							} else
+								t.transmite(clienteSocket, "ERR/Erro ao apostar/ / ");
 							break;
 						case "CAR":
 							usuario.setComprandoCartas(true);
