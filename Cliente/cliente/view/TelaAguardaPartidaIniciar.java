@@ -88,8 +88,9 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 					conecta.Envia(apostar);
 
 					// Validar quantidade minima de usuarios
-					List<String> mensagensErros = conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ")
-							.stream().map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+
+					List<String> mensagensErros = conecta.recebeNMsg("SUC/Fim Mensagens Aposta").stream()
+							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
 
 					System.out.println("Mensagem do recebe N Msg " + mensagensErros);
 
@@ -98,11 +99,11 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 								"Numero de jogares insuficiente, aguarde no minimo tres jogadores.");
 						mensagensErros.clear();
 						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
+					} else {
+						TelaRodada telaRodada = new TelaRodada(conecta);
+						telaRodada.show();
+						dispose();
 					}
-
-					TelaRodada telaRodada = new TelaRodada(conecta);
-					telaRodada.show();
-					dispose();
 
 				} catch (Exception quantidadeUsuarioInsuficiente) {
 					System.err.println(quantidadeUsuarioInsuficiente);

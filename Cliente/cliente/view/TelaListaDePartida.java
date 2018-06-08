@@ -81,6 +81,7 @@ public class TelaListaDePartida extends JFrame {
 				// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
 				String apostar = "SAI/" + null + "/" + null + "/" + null;
 				conecta.Envia(apostar);
+				conecta.Envia(apostar);
 			}
 		});
 		btnSair.setFont(new Font("Tahoma", Font.BOLD, 11));

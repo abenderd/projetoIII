@@ -183,6 +183,7 @@ public class ServerManager {
 									t.transmite(clienteSocket, "SUC/ / / ");
 							} else
 								t.transmite(clienteSocket, "ERR/Erro ao apostar/ / ");
+							t.transmite(clienteSocket, "SUC/Fim Mensagens Aposta");
 							break;
 						case "CAR":
 							usuario.setComprandoCartas(true);
