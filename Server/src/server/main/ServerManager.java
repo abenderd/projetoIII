@@ -207,6 +207,7 @@ public class ServerManager {
 							usuario.setComprandoCartas(true);
 							Carta c = partida.getCarta(usuario.getEmail());
 							t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
+							t.transmite(clienteSocket, "CAR/Fim Transmissao cartas adicionais/ /");
 							break;
 						case "EOC": // ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
 							if (partida == null) {
