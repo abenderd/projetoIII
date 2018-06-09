@@ -100,6 +100,17 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 						mensagensErros.clear();
 						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
 					} else {
+						// DISTRIBUIR 2 CARTAS AO JOGADOR - (CAR/NAIPE/VALOR/NULL) +
+						// (CAR/NAIPE/VALOR/NULL)
+						String ganharCartas = "CAR/" + null + "/" + null + "/" + null;
+						conecta.Envia(ganharCartas);
+						
+						List<String> leNaipe = conecta.recebeNMsg("CAR/Fim Transmissao cartas iniciais/ /").stream()
+								.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+						
+						System.out.println(leNaipe + "Naipeee Caaaaaaaaaaaartas dadas");
+						
+						
 						TelaRodada telaRodada = new TelaRodada(conecta);
 						telaRodada.show();
 						dispose();

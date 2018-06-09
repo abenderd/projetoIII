@@ -196,6 +196,7 @@ public class ServerManager {
 								Carta c = partida.getCarta(usuario.getEmail());
 								t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
 							}
+							t.transmite(clienteSocket, "CAR/Fim Transmissao cartas iniciais/ /");
 							break;
 						case "COM":
 							if (partida == null) {

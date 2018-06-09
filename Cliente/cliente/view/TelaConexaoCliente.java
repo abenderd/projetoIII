@@ -58,6 +58,7 @@ public class TelaConexaoCliente extends JFrame {
 		contentPane.setLayout(null);
 
 		textFieldIpServidor = new JTextField();
+		textFieldIpServidor.setText("127.0.0.1");
 		textFieldIpServidor.setBounds(166, 29, 147, 20);
 		contentPane.add(textFieldIpServidor);
 		textFieldIpServidor.setColumns(10);
