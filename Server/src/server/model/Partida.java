@@ -23,17 +23,18 @@ public class Partida {
 		this.contadorCartas = 0;
 		this.nomePartida = nomePartida;
 		this.status = false;
+		this.usuarios.add(user);
 		geraCartas();
 	}
 
-	public boolean Apostar(String email, int valor) {
+	public boolean Apostar(Usuario user, int valor) {
 		for (int x = 0; x < usuarios.size(); x++) {
-			if (email.equals(usuarios.get(x).getEmail()))
+			if (user.getEmail().equals(usuarios.get(x).getEmail())){
 				if (usuarios.get(x).getSaldo() >= valor) {
 					int novoSaldo = usuarios.get(x).getSaldo() - valor;
 					usuarios.get(x).setSaldo(novoSaldo);
 					try {
-						saldo.setSaldo(email, novoSaldo);
+						saldo.setSaldo(user.getEmail(), novoSaldo);
 						Pote p = new Pote(usuarios.get(x), valor);
 						pote.add(p);
 						return true;
@@ -43,6 +44,7 @@ public class Partida {
 						System.err.println("Erro para seta Saldo - Partida/Apostar (Unknow) - " + e);
 					}
 				}
+			}
 		}
 		return false;
 	}
