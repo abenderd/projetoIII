@@ -29,7 +29,7 @@ public class Partida {
 
 	public boolean Apostar(Usuario user, int valor) {
 		for (int x = 0; x < usuarios.size(); x++) {
-			if (user.getEmail().equals(usuarios.get(x).getEmail())){
+			if (user.getEmail().equals(usuarios.get(x).getEmail())) {
 				if (usuarios.get(x).getSaldo() >= valor) {
 					int novoSaldo = usuarios.get(x).getSaldo() - valor;
 					usuarios.get(x).setSaldo(novoSaldo);
@@ -135,4 +135,47 @@ public class Partida {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+
+	public ArrayList<Carta> getBaralho() {
+		return baralho;
+	}
+
+	public void setBaralho(ArrayList<Carta> baralho) {
+		this.baralho = baralho;
+	}
+
+	public int getContadorCartas() {
+		return contadorCartas;
+	}
+
+	public void setContadorCartas(int contadorCartas) {
+		this.contadorCartas = contadorCartas;
+	}
+
+	public SaldoDAO getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(SaldoDAO saldo) {
+		this.saldo = saldo;
+	}
+
+	public void setUsuarios(ArrayList<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public void setPote(ArrayList<Pote> pote) {
+		this.pote = pote;
+	}
+
+	public void setNomePartida(String nomePartida) {
+		this.nomePartida = nomePartida;
+	}
+
+	@Override
+	public String toString() {
+		return "Partida [usuarios=" + usuarios + ", baralho=" + baralho + ", contadorCartas=" + contadorCartas
+				+ ", pote=" + pote + ", nomePartida=" + nomePartida + ", status=" + status + ", saldo=" + saldo + "]";
+	}
+
 }

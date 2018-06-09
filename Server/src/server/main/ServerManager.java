@@ -355,4 +355,28 @@ public class ServerManager {
 		this.partidas = partidas;
 	}
 
+	public ArrayList<Socket> getClientOutputStreams() {
+		return clientOutputStreams;
+	}
+
+	public void setClientOutputStreams(ArrayList<Socket> clientOutputStreams) {
+		this.clientOutputStreams = clientOutputStreams;
+	}
+
+	public Transmissor getT() {
+		return t;
+	}
+
+	public void setT(Transmissor t) {
+		this.t = t;
+	}
+
+	public ServerSocket getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(ServerSocket receptor) {
+		this.receptor = receptor;
+	}
+
 }

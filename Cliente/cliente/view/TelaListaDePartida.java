@@ -6,7 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import client.model.PartidasEmEsperaModel;
+import client.model.PartidasIniciadasModel;
 import cliente.conection.ClientConexao;
+import cliente.main.ClientManager;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -24,6 +28,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
+import javax.swing.ListSelectionModel;
 
 public class TelaListaDePartida extends JFrame {
 
@@ -95,7 +100,7 @@ public class TelaListaDePartida extends JFrame {
 				// ou (ERR)
 				String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null;
 				conecta.Envia(entrarPartida);
-				
+
 				nomePartidaIniciada = nomePartida;
 
 				TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
@@ -123,14 +128,14 @@ public class TelaListaDePartida extends JFrame {
 								"Partida " + nomePartida + " criada com sucesso.");
 
 						listaEmEspera.addElement(nomePartida);
-						
+
 						TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
 						telaAguardaPartidaIniciar.show();
 						dispose();
 
 					} catch (Exception erroCriarPartida) {
 						JOptionPane.showMessageDialog((Component) e.getSource(), "Erro ao criar partida.");
-						System.out.println(erroCriarPartida);
+						System.err.println(erroCriarPartida);
 					}
 				}
 			}
@@ -164,88 +169,12 @@ public class TelaListaDePartida extends JFrame {
 		contentPane.add(btnSair);
 
 		listPartidasEmEspera = new JList();
+		listPartidasEmEspera.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listPartidasEmEspera.setModel(new PartidasEmEsperaModel(conecta));
 		listPartidasEmEspera.setVisibleRowCount(10);
 		listPartidasEmEspera.setBackground(Color.WHITE);
 		listPartidasEmEspera.setBounds(206, 40, 179, 193);
 		contentPane.add(listPartidasEmEspera);
-	}
-
-	private class ClientManager {
-
-		private ClientConexao conecta;
-
-		public ClientManager(ClientConexao conecta) {
-			this.conecta = conecta;
-		}
-
-		public List<String> consultarPartidasIniciadas() {
-			try {
-				// CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou
-				// (EOP)
-				String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
-				conecta.Envia(partidasIniciadas);
-				System.out.println(partidasIniciadas + " Consultando partidas iniciadas.");
-				return conecta.recebeNMsg("EOP/ / / ").stream().map(s -> s.split("/"))
-						.filter(p -> p[2].equals("Em execucao")).map(p -> p[1]).collect(Collectors.toList());
-
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-			return new LinkedList<>();
-		}
-
-		public List<String> consultarPartidasAguardando() {
-			try {
-				// CONSULTAR PARTIDA - (PAR/NOME/STATUS) - RESPOSTA (PAR/NOME/STATUS/NULL) ou
-				// (EOP)
-				String partidasIniciadas = "PAR/" + null + "/" + true + "/" + null;
-				conecta.Envia(partidasIniciadas);
-				System.out.println(partidasIniciadas + " Consultando partidas iniciadas.");
-				return conecta.recebeNMsg("EOP/ / / ").stream().map(s -> s.split("/"))
-						.filter(p -> p[2].equals("Aguardando")).map(p -> p[1]).collect(Collectors.toList());
-
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-			return new LinkedList<>();
-		}
-	}
-
-	private class PartidasEmEsperaModel extends AbstractListModel {
-
-		List<String> arrayPartidasEmEspera;
-
-		public PartidasEmEsperaModel(ClientConexao conecta) {
-			ClientManager cm = new ClientManager(conecta);
-			arrayPartidasEmEspera = cm.consultarPartidasAguardando();
-		}
-
-		public int getSize() {
-			return arrayPartidasEmEspera.size();
-		}
-
-		public Object getElementAt(int index) {
-			return arrayPartidasEmEspera.get(index);
-		}
-	}
-
-	private class PartidasIniciadasModel extends AbstractListModel {
-
-		List<String> arrayPartidasIniciadas;
-
-		public PartidasIniciadasModel(ClientConexao conecta) {
-			ClientManager cm = new ClientManager(conecta);
-			arrayPartidasIniciadas = cm.consultarPartidasIniciadas();
-		}
-
-		public int getSize() {
-			return arrayPartidasIniciadas.size();
-		}
-
-		public Object getElementAt(int index) {
-			return arrayPartidasIniciadas.get(index);
-		}
 	}
 
 	public JList getListPartidasEmEspera() {
@@ -271,6 +200,20 @@ public class TelaListaDePartida extends JFrame {
 	public void setNomePartidaIniciada(String nomePartidaIniciada) {
 		this.nomePartidaIniciada = nomePartidaIniciada;
 	}
-	
-	
+
+	public DefaultListModel getListaEmEspera() {
+		return listaEmEspera;
+	}
+
+	public void setListaEmEspera(DefaultListModel listaEmEspera) {
+		this.listaEmEspera = listaEmEspera;
+	}
+
+	@Override
+	public String toString() {
+		return "TelaListaDePartida [contentPane=" + contentPane + ", listPartidasEmEspera=" + listPartidasEmEspera
+				+ ", listPartidasIniciadas=" + listPartidasIniciadas + ", listaEmEspera=" + listaEmEspera
+				+ ", nomePartidaIniciada=" + nomePartidaIniciada + "]";
+	}
+
 }

@@ -13,8 +13,8 @@ public class Usuario {
 	private boolean aguardandoSaldo;
 	private ArrayList<Carta> mao;
 	private Socket clienteSocket;
-	
-	public Usuario(String nome, String email, Socket socket){
+
+	public Usuario(String nome, String email, Socket socket) {
 		this.clienteSocket = socket;
 		this.nome = nome;
 		this.email = email;
@@ -22,8 +22,8 @@ public class Usuario {
 		saldo = getSaldo();
 		comprandoCartas = false;
 	}
-	
-	public int getSaldo(){
+
+	public int getSaldo() {
 		SaldoDAO s = new SaldoDAO();
 		try {
 			return s.getSaldo(email);
@@ -34,7 +34,7 @@ public class Usuario {
 		}
 		return -1;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -45,12 +45,12 @@ public class Usuario {
 
 	public int getValorMao() {
 		int valor = 0;
-		for(int x=0;x<mao.size();x++){
+		for (int x = 0; x < mao.size(); x++) {
 			valor = valor + mao.get(x).getValor();
 		}
 		return valor;
 	}
-	
+
 	public Socket getClienteSocket() {
 		return clienteSocket;
 	}
@@ -78,5 +78,32 @@ public class Usuario {
 	public void setAguardandoSaldo(boolean aguardandoSaldo) {
 		this.aguardandoSaldo = aguardandoSaldo;
 	}
-	
+
+	public ArrayList<Carta> getMao() {
+		return mao;
+	}
+
+	public void setMao(ArrayList<Carta> mao) {
+		this.mao = mao;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setClienteSocket(Socket clienteSocket) {
+		this.clienteSocket = clienteSocket;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [nome=" + nome + ", email=" + email + ", saldo=" + saldo + ", comprandoCartas="
+				+ comprandoCartas + ", aguardandoSaldo=" + aguardandoSaldo + ", mao=" + mao + ", clienteSocket="
+				+ clienteSocket + "]";
+	}
+
 }
