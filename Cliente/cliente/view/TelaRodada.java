@@ -29,6 +29,8 @@ import javax.swing.JList;
 import java.awt.Color;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class TelaRodada extends JFrame {
 
@@ -49,6 +51,17 @@ public class TelaRodada extends JFrame {
 	private String cartaString = null;
 	private int c = 0;
 	private int d = 0;
+	private JTextField textFieldPontuacaoAtual;
+	private int pontuacaoAtual = 0;
+	private int contAs = 0;
+	private int contValete = 0;
+	private int contDama = 0;
+	private int contRei = 0;
+	private int contD = 0;
+	private int valorValete = 0;
+	private int valorDama = 0;
+	private int valorRei = 0;
+	private int valorAs = 0;
 
 	/**
 	 * Launch the application.
@@ -83,70 +96,13 @@ public class TelaRodada extends JFrame {
 
 			cartasIniciais = leCartas;
 
-			List<String> pegarNaipeStream = cartasIniciais.stream().map(s -> s.split("/")).map(p -> p[1])
-					.collect(Collectors.toList());
-
-			List<String> pegarValorCartas = cartasIniciais.stream().map(s -> s.split("/")).map(p -> p[2])
-					.collect(Collectors.toList());
-
-			System.out.println(pegarNaipeStream + " Pegar naipe cartas");
-
-			System.out.println(pegarValorCartas + " Pegar valor cartas");
-
-			// paus (1), ouros (2), copas (3) e espadas (4)
-			for (int i = 0, j = 0; i < pegarNaipeStream.size(); i++, j++) {
-				System.out.println(pegarNaipeStream.get(i) + " Pegar posição");
-				naipeStream = pegarNaipeStream.get(i);
-				c = Integer.parseInt(naipeStream);
-				if (c == 1) {
-					System.out.println("Naipe paus " + 1);
-					cartaString = "Paus";
-				} else if (c == 2) {
-					System.out.println("Naipe ouros " + 2);
-					cartaString = "Ouros";
-				} else if (c == 3) {
-					System.out.println("Naipe copas " + 3);
-					cartaString = "Copas";
-				} else if (c == 4) {
-					System.out.println("Naipe espadas " + 4);
-					cartaString = "Espadas";
-				}
-
-				// As (0), 1 (1), 2 (2), 3 (3), 4 (4), 5 (5), 6 (6), 7 (7), 8 (8), 9 (9), 10 (10), 11 (J - Valete), 12 (Q - Dama), 13 (K - Rei)
-				System.out.println(pegarValorCartas.get(j) + " Pegar cartas");
-				cartasStream = pegarValorCartas.get(j);
-				d = Integer.parseInt(cartasStream);
-				if (d == 0) {
-					System.out.println("Carta Ás " + 0);
-					naipeString = "A";
-				} else if (d > 0 && d < 11) {
-					System.out.println("Carta " + d);
-					naipeString = Integer.toString(d);
-				} else if (d == 11) {
-					System.out.println("Carta Valete " + 11);
-					naipeString = "J";
-				} else if (d == 12) {
-					System.out.println("Carta Dama " + 12);
-					naipeString = "Q";
-				} else if (d == 13) {
-					System.out.println("Carta Rei " + 13);
-					naipeString = "R";
-				}
-				cartaENaipe.add(naipeStream + "/" + cartasStream);
-				cartaENaipeString.add(naipeString + " " + cartaString);
-				System.out.println(cartaENaipe + "Carta e naipe");
-
-
-				listaCartasEmEspera.addElement(naipeString + " " + cartaString);
-			}
-			System.out.println(cartaENaipeString + "Carta e naipe to String" + '\n');
-			System.out.println(listaCartasEmEspera + "Lista de espera");
+			exibirCartas(cartasIniciais);
 
 		} catch (Exception e) {
 			System.err.println(e);
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 400);
+		setBounds(100, 100, 413, 365);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -158,10 +114,12 @@ public class TelaRodada extends JFrame {
 				// SAIR DA PARTIDA - (SAI/NULL/NULL/NULL)
 				String apostar = "SAI/" + null + "/" + null + "/" + null;
 				conecta.Envia(apostar);
+
+				System.exit(0);
 			}
 		});
 		btnFinalizarPartida.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnFinalizarPartida.setBounds(10, 327, 123, 23);
+		btnFinalizarPartida.setBounds(216, 141, 151, 23);
 		contentPane.add(btnFinalizarPartida);
 
 		JButton btnComprarCartas = new JButton("Comprar Cartas");
@@ -178,77 +136,21 @@ public class TelaRodada extends JFrame {
 
 					cartasAdicionais = leCartas;
 				} catch (Exception e1) {
-					e1.printStackTrace();
-				}				
-
-				List<String> pegarNaipeStream = cartasAdicionais.stream().map(s -> s.split("/")).map(p -> p[1])
-						.collect(Collectors.toList());
-
-				List<String> pegarValorCartas = cartasAdicionais.stream().map(s -> s.split("/")).map(p -> p[2])
-						.collect(Collectors.toList());
-
-				System.out.println(pegarNaipeStream + " Pegar naipe cartas adicionais");
-
-				System.out.println(pegarValorCartas + " Pegar valor cartas adicionais ");
-
-				// paus (1), ouros (2), copas (3) e espadas (4)
-				for (int i = 0, j = 0; i < pegarNaipeStream.size(); i++, j++) {
-					System.out.println(pegarNaipeStream.get(i) + " Pegar posição");
-					naipeStream = pegarNaipeStream.get(i);
-					c = Integer.parseInt(naipeStream);
-					if (c == 1) {
-						System.out.println("Naipe paus " + 1);
-						cartaString = "Paus";
-					} else if (c == 2) {
-						System.out.println("Naipe ouros " + 2);
-						cartaString = "Ouros";
-					} else if (c == 3) {
-						System.out.println("Naipe copas " + 3);
-						cartaString = "Copas";
-					} else if (c == 4) {
-						System.out.println("Naipe espadas " + 4);
-						cartaString = "Espadas";
-					}
-
-					// As (0), 1 (1), 2 (2), 3 (3), 4 (4), 5 (5), 6 (6), 7 (7), 8 (8), 9 (9), 10 (10), 11 (J - Valete), 12 (Q - Dama), 13 (K - Rei) 
-					System.out.println(pegarValorCartas.get(j) + " Pegar cartas");
-					cartasStream = pegarValorCartas.get(j);
-					d = Integer.parseInt(cartasStream);
-					if (d == 0) {
-						System.out.println("Carta Ás " + 0);
-						naipeString = "A";
-					} else if (d > 0 && d < 11) {
-						System.out.println("Carta " + d);
-						naipeString = Integer.toString(d);
-					} else if (d == 11) {
-						System.out.println("Carta Valete " + 11);
-						naipeString = "J";
-					} else if (d == 12) {
-						System.out.println("Carta Dama " + 12);
-						naipeString = "Q";
-					} else if (d == 13) {
-						System.out.println("Carta Rei " + 13);
-						naipeString = "R";
-					}
-					cartaENaipe.add(naipeStream + "/" + cartasStream);
-					cartaENaipeString.add(naipeString + " " + cartaString);
-					System.out.println(cartaENaipe + "Carta e naipe adicionais");
-
-
-					listaCartasEmEspera.addElement(naipeString + " " + cartaString);
+					System.err.println(e1);;
 				}
-				System.out.println(cartaENaipeString + "Carta e naipe adicionais to String" + '\n');
-				System.out.println(listaCartasEmEspera + "Lista com cartas adicionais");
+
+				exibirCartas(cartasAdicionais);
+				
 			}
 		});
 		btnComprarCartas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnComprarCartas.setBounds(351, 327, 123, 23);
+		btnComprarCartas.setBounds(216, 244, 151, 23);
 		contentPane.add(btnComprarCartas);
 		contentPane.setLayout(null);
 
-		JLabel lblCartas = new JLabel("Cartas:");
-		lblCartas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCartas.setBounds(161, 11, 46, 14);
+		JLabel lblCartas = new JLabel("Carta / Naipe:");
+		lblCartas.setFont(new Font("Sitka Small", Font.BOLD, 13));
+		lblCartas.setBounds(10, 22, 139, 17);
 		contentPane.add(lblCartas);
 
 		JButton button = new JButton("Finalizar Partida");
@@ -260,7 +162,7 @@ public class TelaRodada extends JFrame {
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.BOLD, 11));
-		button.setBounds(168, 327, 151, 23);
+		button.setBounds(216, 192, 151, 23);
 		contentPane.add(button);
 
 		listCartasEmEspera = new JList();
@@ -269,8 +171,25 @@ public class TelaRodada extends JFrame {
 		listCartasEmEspera.setEnabled(false);
 		listCartasEmEspera.setVisibleRowCount(10);
 		listCartasEmEspera.setBackground(Color.WHITE);
-		listCartasEmEspera.setBounds(162, 25, 179, 291);
+		listCartasEmEspera.setBounds(10, 55, 179, 261);
 		contentPane.add(listCartasEmEspera);
+
+		JButton btnDicas = new JButton("?");
+		btnDicas.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnDicas.setBounds(216, 293, 151, 23);
+		contentPane.add(btnDicas);
+
+		JLabel lblPontuaoAtual = new JLabel("Pontua\u00E7\u00E3o Atual:");
+		lblPontuaoAtual.setFont(new Font("Sitka Small", Font.BOLD, 13));
+		lblPontuaoAtual.setBounds(193, 23, 139, 17);
+		contentPane.add(lblPontuaoAtual);
+
+		textFieldPontuacaoAtual = new JTextField();
+		textFieldPontuacaoAtual.setText(Integer.toString(pontuacaoAtual));
+		textFieldPontuacaoAtual.setEditable(false);
+		textFieldPontuacaoAtual.setBounds(333, 20, 54, 20);
+		contentPane.add(textFieldPontuacaoAtual);
+		textFieldPontuacaoAtual.setColumns(10);
 	}
 
 	public JList getListCartasEmEspera() {
@@ -311,6 +230,98 @@ public class TelaRodada extends JFrame {
 
 	public void setCartaENaipeString(ArrayList<String> cartaENaipeString) {
 		this.cartaENaipeString = cartaENaipeString;
+	}
+
+	public void exibirCartas(List<String> cartas) {			
+		List<String> pegarNaipeStream = cartas.stream().map(s -> s.split("/")).map(p -> p[1])
+				.collect(Collectors.toList());
+
+		List<String> pegarValorCartas = cartas.stream().map(s -> s.split("/")).map(p -> p[2])
+				.collect(Collectors.toList());
+
+		System.out.println(pegarNaipeStream + " Pegar naipe cartas");
+
+		System.out.println(pegarValorCartas + " Pegar valor cartas");
+
+		// paus (1), ouros (2), copas (3) e espadas (4)
+		for (int i = 0, j = 0; i < pegarNaipeStream.size(); i++, j++) {
+			System.out.println(pegarNaipeStream.get(i) + " Pegar posição");
+			naipeStream = pegarNaipeStream.get(i);
+			c = Integer.parseInt(naipeStream);
+			if (c == 1) {
+				System.out.println("Naipe paus " + 1);
+				cartaString = "Paus";
+			} else if (c == 2) {
+				System.out.println("Naipe ouros " + 2);
+				cartaString = "Ouros";
+			} else if (c == 3) {
+				System.out.println("Naipe copas " + 3);
+				cartaString = "Copas";
+			} else if (c == 4) {
+				System.out.println("Naipe espadas " + 4);
+				cartaString = "Espadas";
+			}
+
+			// As (0), 1 (1), 2 (2), 3 (3), 4 (4), 5 (5), 6 (6), 7 (7), 8 (8), 9 (9), 10
+			// (10), 11 (J - Valete), 12 (Q - Dama), 13 (K - Rei)
+			System.out.println(pegarValorCartas.get(j) + " Pegar cartas");
+			cartasStream = pegarValorCartas.get(j);
+			d = Integer.parseInt(cartasStream);
+						
+			if (d == 0) {
+				System.out.println("Carta Ás " + 0);
+				naipeString = "A";
+				contAs++;
+			} else if (d > 0 && d < 11) {
+				System.out.println("Carta " + d);
+				naipeString = Integer.toString(d);
+				contD = contD + d;
+			} else if (d == 11) {
+				System.out.println("Carta Valete " + 11);
+				naipeString = "J";
+				contValete++;
+			} else if (d == 12) {
+				System.out.println("Carta Dama " + 12);
+				naipeString = "Q";
+				contDama++;
+			} else if (d == 13) {
+				System.out.println("Carta Rei " + 13);
+				naipeString = "R";
+				contRei++;
+			}
+					
+			if (contValete > 0 || contDama > 0 || contRei > 0) {
+				valorAs = contAs * 11; 
+			} else {
+				valorAs = contAs * 1 ;
+			}
+			
+			valorValete = contValete * 10;
+			valorDama = contDama * 10;
+			valorRei = contRei * 10;
+			
+			
+			pontuacaoAtual = valorValete + valorDama + valorRei + valorAs + contD;
+			
+			cartaENaipe.add(naipeStream + "/" + cartasStream);
+			cartaENaipeString.add(naipeString + " " + cartaString);
+						
+			listaCartasEmEspera.addElement(naipeString + " " + cartaString);
+		}
+		System.out.println("[INFO] Lista de string enviada para exibicao em tela" + listaCartasEmEspera);
+		System.out.println("[INFO] Valor As " + valorAs);
+		System.out.println("[INFO] Valor Valete " + valorValete);	
+		System.out.println("[INFO] Valor Dama " + valorDama);
+		System.out.println("[INFO] Valor Rei " + valorRei);
+		System.out.println("[INFO] Valor D " + contD);
+		System.out.println("[INFO] Contador de As " + contAs);
+		System.out.println("[INFO] Contador de Valete " + contValete);
+		System.out.println("[INFO] Contador de Dama " + contDama);
+		System.out.println("[INFO] Contador de Rei " + contRei);
+		System.out.println("[INFO] Pontuacao atual " + pontuacaoAtual);
+		
+		textFieldPontuacaoAtual.setText(Integer.toString(pontuacaoAtual));
+
 	}
 
 }
