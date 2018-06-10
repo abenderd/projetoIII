@@ -248,10 +248,12 @@ public class ServerManager {
 									ganhadores.get(x).setSaldo(valorPote);
 									t.transmite(ganhadores.get(x).getClienteSocket(),
 											"EOW/" + ganhadores.get(x).getSaldo() + "/ / ");
+									t.transmite(clienteSocket, "EOW/Fim Transmissao Ganhadores/ /");
 								}
 								for (int x = 0; x < perdedores.size(); x++) {
 									t.transmite(perdedores.get(x).getClienteSocket(),
 											"EOW/" + perdedores.get(x).getSaldo() + "/ / ");
+									t.transmite(clienteSocket, "EOW/Fim Transmissao Perdedores/ /");
 								}
 							}
 							break;

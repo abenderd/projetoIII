@@ -74,7 +74,7 @@ public class TelaConexaoCliente extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (textFieldIpServidor.getText().isEmpty() || textFieldIpServidor.getText() == "") {
 
-					JOptionPane.showMessageDialog(null, "Campo obrigatï¿½rio nï¿½o preenchido.");
+					JOptionPane.showMessageDialog(null, "Campo obrigatorio nao preenchido.");
 				} else {
 					try {
 						conecta = new ClientConexao(textFieldIpServidor.getText());
@@ -122,6 +122,8 @@ public class TelaConexaoCliente extends JFrame {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((conecta == null) ? 0 : conecta.hashCode());
+		result = prime * result + ((contentPane == null) ? 0 : contentPane.hashCode());
 		result = prime * result + ((textFieldIpServidor == null) ? 0 : textFieldIpServidor.hashCode());
 		return result;
 	}
@@ -135,6 +137,16 @@ public class TelaConexaoCliente extends JFrame {
 		if (getClass() != obj.getClass())
 			return false;
 		TelaConexaoCliente other = (TelaConexaoCliente) obj;
+		if (conecta == null) {
+			if (other.conecta != null)
+				return false;
+		} else if (!conecta.equals(other.conecta))
+			return false;
+		if (contentPane == null) {
+			if (other.contentPane != null)
+				return false;
+		} else if (!contentPane.equals(other.contentPane))
+			return false;
 		if (textFieldIpServidor == null) {
 			if (other.textFieldIpServidor != null)
 				return false;
@@ -145,6 +157,7 @@ public class TelaConexaoCliente extends JFrame {
 
 	@Override
 	public String toString() {
-		return "TelaConexaoCliente [textFieldIpServidor=" + textFieldIpServidor + "]";
+		return "TelaConexaoCliente [contentPane=" + contentPane + ", textFieldIpServidor=" + textFieldIpServidor
+				+ ", conecta=" + conecta + "]";
 	}
 }

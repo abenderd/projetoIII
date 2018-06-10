@@ -36,6 +36,29 @@ public class PartidasIniciadasModel extends AbstractListModel {
 	public String toString() {
 		return "PartidasIniciadasModel [arrayPartidasIniciadas=" + arrayPartidasIniciadas + "]";
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arrayPartidasIniciadas == null) ? 0 : arrayPartidasIniciadas.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PartidasIniciadasModel other = (PartidasIniciadasModel) obj;
+		if (arrayPartidasIniciadas == null) {
+			if (other.arrayPartidasIniciadas != null)
+				return false;
+		} else if (!arrayPartidasIniciadas.equals(other.arrayPartidasIniciadas))
+			return false;
+		return true;
+	}
 }

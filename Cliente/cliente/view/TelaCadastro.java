@@ -36,7 +36,6 @@ public class TelaCadastro extends JFrame {
 	 * Launch the application.
 	 */
 
-
 	public void create(ClientConexao conecta) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -177,6 +176,7 @@ public class TelaCadastro extends JFrame {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((contentPane == null) ? 0 : contentPane.hashCode());
 		result = prime * result + ((passwordField == null) ? 0 : passwordField.hashCode());
 		result = prime * result + ((passwordFieldConfirmacao == null) ? 0 : passwordFieldConfirmacao.hashCode());
 		result = prime * result + ((textFieldEmail == null) ? 0 : textFieldEmail.hashCode());
@@ -193,6 +193,11 @@ public class TelaCadastro extends JFrame {
 		if (getClass() != obj.getClass())
 			return false;
 		TelaCadastro other = (TelaCadastro) obj;
+		if (contentPane == null) {
+			if (other.contentPane != null)
+				return false;
+		} else if (!contentPane.equals(other.contentPane))
+			return false;
 		if (passwordField == null) {
 			if (other.passwordField != null)
 				return false;
@@ -218,7 +223,9 @@ public class TelaCadastro extends JFrame {
 
 	@Override
 	public String toString() {
-		return "TelaCadastro [textFieldNome=" + textFieldNome + ", textFieldEmail=" + textFieldEmail
-				+ ", passwordField=" + passwordField + ", passwordFieldConfirmacao=" + passwordFieldConfirmacao + "]";
+		return "TelaCadastro [contentPane=" + contentPane + ", textFieldNome=" + textFieldNome + ", textFieldEmail="
+				+ textFieldEmail + ", passwordField=" + passwordField + ", passwordFieldConfirmacao="
+				+ passwordFieldConfirmacao + "]";
 	}
+
 }

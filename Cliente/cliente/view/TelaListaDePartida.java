@@ -216,4 +216,52 @@ public class TelaListaDePartida extends JFrame {
 				+ ", nomePartidaIniciada=" + nomePartidaIniciada + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((contentPane == null) ? 0 : contentPane.hashCode());
+		result = prime * result + ((listPartidasEmEspera == null) ? 0 : listPartidasEmEspera.hashCode());
+		result = prime * result + ((listPartidasIniciadas == null) ? 0 : listPartidasIniciadas.hashCode());
+		result = prime * result + ((listaEmEspera == null) ? 0 : listaEmEspera.hashCode());
+		result = prime * result + ((nomePartidaIniciada == null) ? 0 : nomePartidaIniciada.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TelaListaDePartida other = (TelaListaDePartida) obj;
+		if (contentPane == null) {
+			if (other.contentPane != null)
+				return false;
+		} else if (!contentPane.equals(other.contentPane))
+			return false;
+		if (listPartidasEmEspera == null) {
+			if (other.listPartidasEmEspera != null)
+				return false;
+		} else if (!listPartidasEmEspera.equals(other.listPartidasEmEspera))
+			return false;
+		if (listPartidasIniciadas == null) {
+			if (other.listPartidasIniciadas != null)
+				return false;
+		} else if (!listPartidasIniciadas.equals(other.listPartidasIniciadas))
+			return false;
+		if (listaEmEspera == null) {
+			if (other.listaEmEspera != null)
+				return false;
+		} else if (!listaEmEspera.equals(other.listaEmEspera))
+			return false;
+		if (nomePartidaIniciada == null) {
+			if (other.nomePartidaIniciada != null)
+				return false;
+		} else if (!nomePartidaIniciada.equals(other.nomePartidaIniciada))
+			return false;
+		return true;
+	}
 }

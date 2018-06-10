@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
@@ -92,15 +94,14 @@ public class TelaRodada extends JFrame {
 
 			List<String> leCartas = conecta.recebeNMsgSemCondParada("CAR/Fim Transmissao cartas iniciais/ /");
 
-			System.out.println(leCartas + "Cartas iniciais dadas");
+			System.out.println("[INFO] Cartas iniciais dadas " + leCartas);
 
 			cartasIniciais = leCartas;
 
 			exibirCartas(cartasIniciais);
 
-		} catch (Exception e) {
-			System.err.println(e);
-		}
+		} catch (Exception e) {}
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 413, 365);
 		contentPane = new JPanel();
@@ -136,11 +137,12 @@ public class TelaRodada extends JFrame {
 
 					cartasAdicionais = leCartas;
 				} catch (Exception e1) {
-					System.err.println(e1);;
+					System.err.println(e1);
+					;
 				}
 
 				exibirCartas(cartasAdicionais);
-				
+
 			}
 		});
 		btnComprarCartas.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -156,9 +158,28 @@ public class TelaRodada extends JFrame {
 		JButton button = new JButton("Finalizar Partida");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
-				String apostar = "WIN/" + null + "/" + null + "/" + null;
+				// ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
+				String apostar = "EOC/" + null + "/" + null + "/" + null;
 				conecta.Envia(apostar);
+				
+				// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
+				List<String> mensagensErros;
+				try {
+					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao Ganhadores/ /").stream()
+							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+					System.out.println("[INFO] Definindo ganhadoresssssssssssssssssssssssssssssssssssssssssssssssssssss " + mensagensErros);
+					JOptionPane.showMessageDialog(null,
+							"Voce perdeu, tente novamente.");
+					TelaRodada telaRodada = new TelaRodada(conecta);
+					telaRodada.show();
+					dispose();
+					
+					
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -175,11 +196,19 @@ public class TelaRodada extends JFrame {
 		contentPane.add(listCartasEmEspera);
 
 		JButton btnDicas = new JButton("?");
+		btnDicas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"A carta 'A' tera valor 11 se na mão houver um Valete (J), Dama (Q) ou Rei (K);" + '\n'
+								+ "Valete, Dama, Rei ou qualquer carta 10 equivalem a 10 pontos;" + '\n'
+								+ "As demais cartas possuem pontuação indicada por seus valores.");
+			}
+		});
 		btnDicas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnDicas.setBounds(216, 293, 151, 23);
 		contentPane.add(btnDicas);
 
-		JLabel lblPontuaoAtual = new JLabel("Pontua\u00E7\u00E3o Atual:");
+		JLabel lblPontuaoAtual = new JLabel("Pontuacao Atual:");
 		lblPontuaoAtual.setFont(new Font("Sitka Small", Font.BOLD, 13));
 		lblPontuaoAtual.setBounds(193, 23, 139, 17);
 		contentPane.add(lblPontuaoAtual);
@@ -232,85 +261,84 @@ public class TelaRodada extends JFrame {
 		this.cartaENaipeString = cartaENaipeString;
 	}
 
-	public void exibirCartas(List<String> cartas) {			
+	public void exibirCartas(List<String> cartas) {
 		List<String> pegarNaipeStream = cartas.stream().map(s -> s.split("/")).map(p -> p[1])
 				.collect(Collectors.toList());
 
 		List<String> pegarValorCartas = cartas.stream().map(s -> s.split("/")).map(p -> p[2])
 				.collect(Collectors.toList());
 
-		System.out.println(pegarNaipeStream + " Pegar naipe cartas");
+		System.out.println("[INFO] Naipe da nova carta" + pegarNaipeStream);
 
-		System.out.println(pegarValorCartas + " Pegar valor cartas");
+		System.out.println("[INFO] Numero da nova carta" + pegarValorCartas);
 
 		// paus (1), ouros (2), copas (3) e espadas (4)
 		for (int i = 0, j = 0; i < pegarNaipeStream.size(); i++, j++) {
-			System.out.println(pegarNaipeStream.get(i) + " Pegar posição");
+			System.out.println("[INFO] Posicao para naipe" + pegarNaipeStream.get(i));
 			naipeStream = pegarNaipeStream.get(i);
 			c = Integer.parseInt(naipeStream);
 			if (c == 1) {
-				System.out.println("Naipe paus " + 1);
+				System.out.println("[INFO] Naipe paus " + 1);
 				cartaString = "Paus";
 			} else if (c == 2) {
-				System.out.println("Naipe ouros " + 2);
+				System.out.println("[INFO] Naipe ouros " + 2);
 				cartaString = "Ouros";
 			} else if (c == 3) {
-				System.out.println("Naipe copas " + 3);
+				System.out.println("[INFO] Naipe copas " + 3);
 				cartaString = "Copas";
 			} else if (c == 4) {
-				System.out.println("Naipe espadas " + 4);
+				System.out.println("[INFO] Naipe espadas " + 4);
 				cartaString = "Espadas";
 			}
 
 			// As (0), 1 (1), 2 (2), 3 (3), 4 (4), 5 (5), 6 (6), 7 (7), 8 (8), 9 (9), 10
 			// (10), 11 (J - Valete), 12 (Q - Dama), 13 (K - Rei)
-			System.out.println(pegarValorCartas.get(j) + " Pegar cartas");
+			System.out.println("[INFO] Posicao para valor" + pegarValorCartas.get(j));
 			cartasStream = pegarValorCartas.get(j);
 			d = Integer.parseInt(cartasStream);
-						
+
 			if (d == 0) {
-				System.out.println("Carta Ás " + 0);
+				System.out.println("[INFO] Carta Ás " + 0);
 				naipeString = "A";
 				contAs++;
 			} else if (d > 0 && d < 11) {
-				System.out.println("Carta " + d);
+				System.out.println("[INFO] Carta " + d);
 				naipeString = Integer.toString(d);
 				contD = contD + d;
 			} else if (d == 11) {
-				System.out.println("Carta Valete " + 11);
+				System.out.println("[INFO] Carta Valete " + 11);
 				naipeString = "J";
 				contValete++;
 			} else if (d == 12) {
-				System.out.println("Carta Dama " + 12);
+				System.out.println("[INFO] Carta Dama " + 12);
 				naipeString = "Q";
 				contDama++;
 			} else if (d == 13) {
-				System.out.println("Carta Rei " + 13);
+				System.out.println("[INFO] Carta Rei " + 13);
 				naipeString = "R";
 				contRei++;
 			}
-					
+
 			if (contValete > 0 || contDama > 0 || contRei > 0) {
-				valorAs = contAs * 11; 
+				valorAs = contAs * 11;
 			} else {
-				valorAs = contAs * 1 ;
+				valorAs = contAs * 1;
 			}
-			
+
 			valorValete = contValete * 10;
 			valorDama = contDama * 10;
 			valorRei = contRei * 10;
-			
-			
+
 			pontuacaoAtual = valorValete + valorDama + valorRei + valorAs + contD;
-			
+
 			cartaENaipe.add(naipeStream + "/" + cartasStream);
 			cartaENaipeString.add(naipeString + " " + cartaString);
-						
+
 			listaCartasEmEspera.addElement(naipeString + " " + cartaString);
 		}
 		System.out.println("[INFO] Lista de string enviada para exibicao em tela" + listaCartasEmEspera);
 		System.out.println("[INFO] Valor As " + valorAs);
-		System.out.println("[INFO] Valor Valete " + valorValete);	
+		System.out.println("[INFO] Valor Valete " + valorValete);
 		System.out.println("[INFO] Valor Dama " + valorDama);
 		System.out.println("[INFO] Valor Rei " + valorRei);
 		System.out.println("[INFO] Valor D " + contD);
@@ -319,9 +347,49 @@ public class TelaRodada extends JFrame {
 		System.out.println("[INFO] Contador de Dama " + contDama);
 		System.out.println("[INFO] Contador de Rei " + contRei);
 		System.out.println("[INFO] Pontuacao atual " + pontuacaoAtual);
-		
+
 		textFieldPontuacaoAtual.setText(Integer.toString(pontuacaoAtual));
 
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + c;
+		result = prime * result + ((cartaENaipe == null) ? 0 : cartaENaipe.hashCode());
+		result = prime * result + ((cartaENaipeString == null) ? 0 : cartaENaipeString.hashCode());
+		result = prime * result + ((cartaString == null) ? 0 : cartaString.hashCode());
+		result = prime * result + ((cartasAdicionais == null) ? 0 : cartasAdicionais.hashCode());
+		result = prime * result + ((cartasIniciais == null) ? 0 : cartasIniciais.hashCode());
+		result = prime * result + ((cartasStream == null) ? 0 : cartasStream.hashCode());
+		result = prime * result + contAs;
+		result = prime * result + contD;
+		result = prime * result + contDama;
+		result = prime * result + contRei;
+		result = prime * result + contValete;
+		result = prime * result + ((contentPane == null) ? 0 : contentPane.hashCode());
+		result = prime * result + d;
+		result = prime * result + ((listCartasEmEspera == null) ? 0 : listCartasEmEspera.hashCode());
+		result = prime * result + ((listaCartasEmEspera == null) ? 0 : listaCartasEmEspera.hashCode());
+		result = prime * result + ((naipeStream == null) ? 0 : naipeStream.hashCode());
+		result = prime * result + ((naipeString == null) ? 0 : naipeString.hashCode());
+		result = prime * result + pontuacaoAtual;
+		result = prime * result + ((textFieldPontuacaoAtual == null) ? 0 : textFieldPontuacaoAtual.hashCode());
+		result = prime * result + valorAs;
+		result = prime * result + valorDama;
+		result = prime * result + valorRei;
+		result = prime * result + valorValete;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		return true;
 	}
 
 }

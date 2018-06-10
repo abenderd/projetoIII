@@ -135,6 +135,8 @@ public class TelaLogin extends JFrame {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((contentPane == null) ? 0 : contentPane.hashCode());
+		result = prime * result + ((nomePessoaLogada == null) ? 0 : nomePessoaLogada.hashCode());
 		result = prime * result + ((passwordField == null) ? 0 : passwordField.hashCode());
 		result = prime * result + ((textFieldEmail == null) ? 0 : textFieldEmail.hashCode());
 		return result;
@@ -149,6 +151,16 @@ public class TelaLogin extends JFrame {
 		if (getClass() != obj.getClass())
 			return false;
 		TelaLogin other = (TelaLogin) obj;
+		if (contentPane == null) {
+			if (other.contentPane != null)
+				return false;
+		} else if (!contentPane.equals(other.contentPane))
+			return false;
+		if (nomePessoaLogada == null) {
+			if (other.nomePessoaLogada != null)
+				return false;
+		} else if (!nomePessoaLogada.equals(other.nomePessoaLogada))
+			return false;
 		if (passwordField == null) {
 			if (other.passwordField != null)
 				return false;

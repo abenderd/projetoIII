@@ -58,6 +58,29 @@ public class ClientManager {
 	public String toString() {
 		return "ClientManager [conecta=" + conecta + "]";
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((conecta == null) ? 0 : conecta.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ClientManager other = (ClientManager) obj;
+		if (conecta == null) {
+			if (other.conecta != null)
+				return false;
+		} else if (!conecta.equals(other.conecta))
+			return false;
+		return true;
+	}
 }

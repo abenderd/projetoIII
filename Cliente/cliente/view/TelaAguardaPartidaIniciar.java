@@ -81,18 +81,16 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					int valorAposta = Integer.parseInt(JOptionPane.showInputDialog(null, "Valor da aposta: "));
-					System.out.println("Aposta is:" + valorAposta);
+					System.out.println("[INFO] Aposta is:" + valorAposta);
 
 					// APOSTA EM UMA JOGADA - (APO/VALOR/NULL/NULL) - RESPOSTA (SUC) ou (ERR)
 					String apostar = "APO/" + valorAposta + "/" + null + "/" + null;
 					conecta.Envia(apostar);
 
-					// Validar quantidade minima de usuarios
-
 					List<String> mensagensErros = conecta.recebeNMsg("SUC/Fim Mensagens Aposta").stream()
 							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
 
-					System.out.println("Mensagem do recebe N Msg " + mensagensErros);
+					System.out.println("[INFO] Recebendo N Msg " + mensagensErros);
 
 					if (mensagensErros.contains("Numero de jogadores insuficiente")) {
 						JOptionPane.showMessageDialog(null,
