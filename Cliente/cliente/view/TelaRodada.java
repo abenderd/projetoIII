@@ -165,9 +165,9 @@ public class TelaRodada extends JFrame {
 				// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
 				List<String> mensagensErros;
 				try {
-					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao Ganhadores/ /").stream()
+					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao Perdedores/ /").stream()
 							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
-					System.out.println("[INFO] Definindo ganhadoresssssssssssssssssssssssssssssssssssssssssssssssssssss " + mensagensErros);
+					System.out.println("[INFO] Definindo perdedores " + mensagensErros);
 					JOptionPane.showMessageDialog(null,
 							"Voce perdeu, tente novamente.");
 					TelaRodada telaRodada = new TelaRodada(conecta);
@@ -177,7 +177,7 @@ public class TelaRodada extends JFrame {
 					
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println(e1);;
 				}
 				
 			}
