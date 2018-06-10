@@ -115,7 +115,7 @@ public class ServerManager {
 								t.transmite(clienteSocket, cad.getNome() + " Logado com sucesso");
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
-								t.transmite(clienteSocket, cad.getNome() + " Logado com erro");
+								t.transmite(clienteSocket, cad.getNome() + " Usuario ou senha invalido");
 							}
 							break;
 						case "CRI":
@@ -157,6 +157,7 @@ public class ServerManager {
 										partidas.get(x).addUsuario(usuario);
 										partida = partidas.get(x);
 										success = true;
+										usuario.setComprandoCartas(true);
 										break;
 									}
 								}
@@ -177,6 +178,7 @@ public class ServerManager {
 								String email = usuario.getEmail();
 								Float saldo = (float) saldoDAO.getSaldo(email);
 								Float aposta = Float.parseFloat(var2);
+								usuario.setComprandoCartas(true);
 								if (saldo < aposta) {
 									t.transmite(clienteSocket, "ERR/Saldo insuficiente/ / ");
 								} else
@@ -186,18 +188,21 @@ public class ServerManager {
 							t.transmite(clienteSocket, "SUC/Fim Mensagens Aposta");
 							break;
 						case "CAR":
-							usuario.setComprandoCartas(true);
 							if (partida == null) {
 								InputMismatchException erro = new InputMismatchException(
 										"(CAR) Voce precisa estar em uma partida para solicitar cartas");
 								throw erro;
+							}else if (!partida.iniciaPartida()) {
+								t.transmite(clienteSocket, "ERR/Numero de jogadores insuficiente para entregar cartas/ / ");
+							}else{
+								usuario.setComprandoCartas(true);
+								for (int x = 0; x < 2; x++) {
+									Carta c = partida.getCarta(usuario.getEmail());
+									t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
+								}
+								t.transmite(clienteSocket, "CAR/Fim Transmissao cartas iniciais/ /");
 							}
-							for (int x = 0; x < 2; x++) {
-								Carta c = partida.getCarta(usuario.getEmail());
-								t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
-							}
-							t.transmite(clienteSocket, "CAR/Fim Transmissao cartas iniciais/ /");
-							break;
+							break;								
 						case "COM":
 							if (partida == null) {
 								InputMismatchException erro = new InputMismatchException(
