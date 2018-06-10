@@ -67,12 +67,6 @@ public class TelaListaDePartida extends JFrame {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public TelaListaDePartida(ClientConexao conecta) {
-		// le a msg do login
-		try {
-			conecta.recebe1Msg();
-		} catch (Exception e) {
-			System.err.println(e);
-		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 451, 350);
 		contentPane = new JPanel();

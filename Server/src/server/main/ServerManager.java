@@ -103,20 +103,22 @@ public class ServerManager {
 							try {
 								cadDao.cadastro(cad);
 							} catch (Exception e) {
-								t.transmite(clienteSocket, var2 + "/" + e);
+								t.transmite(clienteSocket,"ERR/" + "Erro ao realizar cadastro" + "/" + var2 + "/" + e);
 							}
-							t.transmite(clienteSocket, var2 + "Cadastrado com sucesso");
+							t.transmite(clienteSocket, "SUC/" + var2 + "/Cadastrado com sucesso/");
+							t.transmite(clienteSocket, "SUC/Fim transmissao cadastro/ / ");
 							break;
 						case "LOG":
 							try {
 								cad = cadDao.getUsuario(var2, var3);
 								System.out.println(cad.toString());
 								usuario = new Usuario(var3, var2, clienteSocket);
-								t.transmite(clienteSocket, cad.getNome() + " Logado com sucesso");
+								t.transmite(clienteSocket, "SUC/" + "Logado com sucesso" + "/" + cad.getNome() + "/");
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
-								t.transmite(clienteSocket, cad.getNome() + " Usuario ou senha invalido");
+								t.transmite(clienteSocket,"ERR/" + "Usuario ou senha invalido" + "/" + cad.getNome() + "/");
 							}
+							t.transmite(clienteSocket, "SUC/Fim transmissao login/ / ");
 							break;
 						case "CRI":
 							if (usuario.isAguardandoSaldo()) {
@@ -212,6 +214,7 @@ public class ServerManager {
 							usuario.setComprandoCartas(true);
 							Carta c = partida.getCarta(usuario.getEmail());
 							t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
+							t.transmite(clienteSocket, "SUC/" + usuario.getSaldo() + "/ / ");
 							t.transmite(clienteSocket, "CAR/Fim Transmissao cartas adicionais/ /");
 							break;
 						case "EOC": // ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
@@ -260,6 +263,7 @@ public class ServerManager {
 											"EOW/" + perdedores.get(x).getSaldo() + "/ / ");
 									t.transmite(clienteSocket, "EOW/Fim Transmissao Perdedores/ /");
 								}
+								t.transmite(clienteSocket, "EOW/Fim Transmissao Resultado/ /");
 							}
 							break;
 						case "SAI":

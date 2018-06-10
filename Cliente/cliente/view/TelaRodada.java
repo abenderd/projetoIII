@@ -100,8 +100,10 @@ public class TelaRodada extends JFrame {
 
 			exibirCartas(cartasIniciais);
 
-		} catch (Exception e) {}
-		
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 413, 365);
 		contentPane = new JPanel();
@@ -138,7 +140,6 @@ public class TelaRodada extends JFrame {
 					cartasAdicionais = leCartas;
 				} catch (Exception e1) {
 					System.err.println(e1);
-					;
 				}
 
 				exibirCartas(cartasAdicionais);
@@ -161,25 +162,32 @@ public class TelaRodada extends JFrame {
 				// ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
 				String apostar = "EOC/" + null + "/" + null + "/" + null;
 				conecta.Envia(apostar);
-				
+
 				// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
 				List<String> mensagensErros;
 				try {
-					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao Perdedores/ /").stream()
+					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao EOW/ /").stream()
 							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
-					System.out.println("[INFO] Definindo perdedores " + mensagensErros);
-					JOptionPane.showMessageDialog(null,
-							"Voce perdeu, tente novamente.");
-					TelaRodada telaRodada = new TelaRodada(conecta);
-					telaRodada.show();
-					dispose();
 					
+					System.out.println("[INFO] Recebendo N Msg Fim da Rodada " + mensagensErros);
 					
+					if (mensagensErros.contains("Fim Transmissao Perdedores")) {
+						JOptionPane.showMessageDialog(null, "Voce perdeu, tente novamente.");
+						mensagensErros.clear();
+						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
+					} else {
+						JOptionPane.showMessageDialog(null, "Voce ganhou, parabéns!");
+					}
+
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
-					System.err.println(e1);;
+					System.err.println(e1);
 				}
-				
+
+				TelaRodada telaRodada2 = new TelaRodada(conecta);
+				telaRodada2.show();
+				dispose();
+
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.BOLD, 11));

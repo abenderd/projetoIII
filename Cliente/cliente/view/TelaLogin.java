@@ -11,6 +11,8 @@ import cliente.conection.ClientConexao;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -76,9 +78,23 @@ public class TelaLogin extends JFrame {
 					String mensagem = "LOG/" + email + "/" + senha + "/" + " ";
 					conecta.Envia(mensagem);
 
-					TelaListaDePartida telaListaDePartida = new TelaListaDePartida(conecta);
-					telaListaDePartida.show();
-					dispose();
+					try {
+						List<String> mensagensErros = conecta.recebeNMsg("SUC/Fim transmissao login/ / ").stream()
+								.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+
+						System.out.println("[INFO] Recebendo N Msg " + mensagensErros);
+
+						if (mensagensErros.contains("Usuario ou senha invalido")) {
+							JOptionPane.showMessageDialog(null, "Usuario ou senha invalidos.");
+						} else {
+							TelaListaDePartida telaListaDePartida = new TelaListaDePartida(conecta);
+							telaListaDePartida.show();
+							dispose();
+						}
+
+					} catch (Exception e) {
+						System.err.println(e);
+					}
 				}
 
 			}

@@ -12,8 +12,10 @@ import cliente.conection.ClientConexao;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -87,13 +89,23 @@ public class TelaCadastro extends JFrame {
 					try {
 						String mensagem = "CAD/" + email + "/" + nome + "/" + senha;
 						conecta.Envia(mensagem);
+
+						List<String> mensagensErros = conecta.recebeNMsg("SUC/Fim transmissao cadastro/ / ").stream()
+								.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+
+						System.out.println("[INFO] Recebendo N Msg " + mensagensErros);
+
+						if (mensagensErros.contains("Erro ao realizar cadastro")) {
+							JOptionPane.showMessageDialog(null, "Erro ao realizar cadastro.");
+						} else {
+							TelaLogin login = new TelaLogin(conecta);
+							login.show();
+							dispose();
+						}
+
 					} catch (Exception erro) {
 						System.out.println(erro);
 					}
-
-					TelaLogin login = new TelaLogin(conecta);
-					login.show();
-					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "Senha e confirmacao de senha nao conferem.");
 
