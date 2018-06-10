@@ -1,8 +1,1 @@
-cliente.conection
-cliente.main
 cliente.view
-server.conection
-server.dao
-server.database
-server.dbo
-server.main

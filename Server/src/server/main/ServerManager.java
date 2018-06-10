@@ -269,6 +269,7 @@ public class ServerManager {
 											"EOW/" + perdedores.get(x).getSaldo() + "/ / ");
 									t.transmite(clienteSocket, "EOW/Fim Transmissao Perdedores/ /");
 								}
+								t.transmite(clienteSocket, "EOW/Fim Transmissao EOC/ /");
 							}
 							t.transmite(clienteSocket, "EOW/Fim Transmissao Resultado/ /");
 							break;

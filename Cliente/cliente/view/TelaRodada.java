@@ -163,7 +163,15 @@ public class TelaRodada extends JFrame {
 
 				// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
 				List<String> mensagensErros;
+				List<String> mensagemFinal;
 				try {
+								
+					do {
+						JOptionPane.showMessageDialog(null, "Aguarde o resultado!");
+						mensagemFinal = conecta.recebeNMsg("EOW/Fim Transmissao EOC/ /").stream()
+								.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
+					} while (!mensagemFinal.contains("Fim Transmissao EOC"));
+										
 					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao Resultado/ /").stream()
 							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
 					
