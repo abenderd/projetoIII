@@ -108,6 +108,13 @@ public class Partida {
 			return true;
 		}
 	}
+	
+	public boolean qtdeUsuario() {
+		if (usuarios.size() < 2 || usuarios.size() > 7) {
+			return false;
+		}
+		return true;
+	}
 
 	public boolean fimRodada() {
 		for (int x = 0; x < usuarios.size(); x++) {

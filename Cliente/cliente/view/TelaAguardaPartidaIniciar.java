@@ -96,7 +96,6 @@ public class TelaAguardaPartidaIniciar extends JFrame {
 						JOptionPane.showMessageDialog(null,
 								"Numero de jogares insuficiente, aguarde no minimo tres jogadores.");
 						mensagensErros.clear();
-						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
 					} else {
 						TelaRodada telaRodada = new TelaRodada(conecta);
 						telaRodada.show();

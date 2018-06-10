@@ -100,9 +100,7 @@ public class TelaRodada extends JFrame {
 
 			exibirCartas(cartasIniciais);
 
-		} catch (Exception e) {
-			System.err.println(e);
-		}
+		} catch (Exception e) {}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 413, 365);
@@ -134,7 +132,7 @@ public class TelaRodada extends JFrame {
 
 				List<String> leCartas;
 				try {
-					leCartas = conecta.recebeNMsgSemCondParada("CAR/Fim Transmissao cartas adicionais/ /");
+					leCartas = conecta.recebeNMsgSemCondParada("COM/Fim Transmissao cartas adicionais/ /");
 					System.out.println(leCartas + "Cartas adicionais dadas");
 
 					cartasAdicionais = leCartas;
@@ -166,7 +164,7 @@ public class TelaRodada extends JFrame {
 				// DEFINIR VENCEDORES - (WIN/NOME/EMAIL/NULL) + xWIN? + (EOW/SALDO/NULL/NULL)
 				List<String> mensagensErros;
 				try {
-					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao EOW/ /").stream()
+					mensagensErros = conecta.recebeNMsg("EOW/Fim Transmissao Resultado/ /").stream()
 							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
 					
 					System.out.println("[INFO] Recebendo N Msg Fim da Rodada " + mensagensErros);
@@ -184,8 +182,8 @@ public class TelaRodada extends JFrame {
 					System.err.println(e1);
 				}
 
-				TelaRodada telaRodada2 = new TelaRodada(conecta);
-				telaRodada2.show();
+				TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
+				telaAguardaPartidaIniciar.show();
 				dispose();
 
 			}
@@ -282,7 +280,7 @@ public class TelaRodada extends JFrame {
 
 		// paus (1), ouros (2), copas (3) e espadas (4)
 		for (int i = 0, j = 0; i < pegarNaipeStream.size(); i++, j++) {
-			System.out.println("[INFO] Posicao para naipe" + pegarNaipeStream.get(i));
+			System.out.println("[INFO] Posicao para naipe " + pegarNaipeStream.get(i));
 			naipeStream = pegarNaipeStream.get(i);
 			c = Integer.parseInt(naipeStream);
 			if (c == 1) {
@@ -301,7 +299,7 @@ public class TelaRodada extends JFrame {
 
 			// As (0), 1 (1), 2 (2), 3 (3), 4 (4), 5 (5), 6 (6), 7 (7), 8 (8), 9 (9), 10
 			// (10), 11 (J - Valete), 12 (Q - Dama), 13 (K - Rei)
-			System.out.println("[INFO] Posicao para valor" + pegarValorCartas.get(j));
+			System.out.println("[INFO] Posicao para valor " + pegarValorCartas.get(j));
 			cartasStream = pegarValorCartas.get(j);
 			d = Integer.parseInt(cartasStream);
 
@@ -383,7 +381,6 @@ public class TelaRodada extends JFrame {
 		result = prime * result + ((naipeStream == null) ? 0 : naipeStream.hashCode());
 		result = prime * result + ((naipeString == null) ? 0 : naipeString.hashCode());
 		result = prime * result + pontuacaoAtual;
-		result = prime * result + ((textFieldPontuacaoAtual == null) ? 0 : textFieldPontuacaoAtual.hashCode());
 		result = prime * result + valorAs;
 		result = prime * result + valorDama;
 		result = prime * result + valorRei;

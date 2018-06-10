@@ -89,17 +89,22 @@ public class TelaListaDePartida extends JFrame {
 		btnIniciarPartida.setBounds(287, 270, 131, 30);
 		btnIniciarPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nomePartida = listPartidasEmEspera.getSelectedValue().toString();
-				// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
-				// ou (ERR)
-				String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null;
-				conecta.Envia(entrarPartida);
+				if (listPartidasEmEspera.isSelectionEmpty()) {
+					JOptionPane.showMessageDialog(null, "Selecione uma partida em espera, ou crie uma nova.");
+				} else {
+					String nomePartida = listPartidasEmEspera.getSelectedValue().toString();
 
-				nomePartidaIniciada = nomePartida;
+					// ENTRAR EM UM PARTIDA - (ENT/NOME/NULL/NULL) - RESPOSTA (SUC/SALDO/NULL/NULL)
+					// ou (ERR)
+					String entrarPartida = "ENT/" + nomePartida + "/" + null + "/" + null;
+					conecta.Envia(entrarPartida);
 
-				TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
-				telaAguardaPartidaIniciar.show();
-				dispose();
+					nomePartidaIniciada = nomePartida;
+
+					TelaAguardaPartidaIniciar telaAguardaPartidaIniciar = new TelaAguardaPartidaIniciar(conecta);
+					telaAguardaPartidaIniciar.show();
+					dispose();
+				}
 			}
 		});
 

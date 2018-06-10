@@ -103,7 +103,7 @@ public class ServerManager {
 							try {
 								cadDao.cadastro(cad);
 							} catch (Exception e) {
-								t.transmite(clienteSocket,"ERR/" + "Erro ao realizar cadastro" + "/" + var2 + "/" + e);
+								t.transmite(clienteSocket, "ERR/" + "Erro ao realizar cadastro" + "/" + var2 + "/" + e);
 							}
 							t.transmite(clienteSocket, "SUC/" + var2 + "/Cadastrado com sucesso/");
 							t.transmite(clienteSocket, "SUC/Fim transmissao cadastro/ / ");
@@ -116,7 +116,8 @@ public class ServerManager {
 								t.transmite(clienteSocket, "SUC/" + "Logado com sucesso" + "/" + cad.getNome() + "/");
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
-								t.transmite(clienteSocket,"ERR/" + "Usuario ou senha invalido" + "/" + cad.getNome() + "/");
+								t.transmite(clienteSocket,
+										"ERR/" + "Usuario ou senha invalido" + "/" + cad.getNome() + "/");
 							}
 							t.transmite(clienteSocket, "SUC/Fim transmissao login/ / ");
 							break;
@@ -138,7 +139,7 @@ public class ServerManager {
 									Partida nova = new Partida(var2, usuario);
 									partidas.add(nova);
 									partida = nova;
-									t.transmite(clienteSocket, "SUC/ / / ");
+									t.transmite(clienteSocket, "SUC/Criando Partida/ / ");
 								}
 							}
 							break;
@@ -177,14 +178,19 @@ public class ServerManager {
 							} else if (!partida.iniciaPartida()) {
 								t.transmite(clienteSocket, "ERR/Numero de jogadores insuficiente/ / ");
 							} else if (partida.Apostar(usuario, Integer.parseInt(var2))) {
-								String email = usuario.getEmail();
-								Float saldo = (float) saldoDAO.getSaldo(email);
-								Float aposta = Float.parseFloat(var2);
-								usuario.setComprandoCartas(true);
-								if (saldo < aposta) {
-									t.transmite(clienteSocket, "ERR/Saldo insuficiente/ / ");
-								} else
-									t.transmite(clienteSocket, "SUC/ / / ");
+								if (partida.qtdeUsuario() == false) {
+									t.transmite(clienteSocket, "ERR/Numero de jogadores insuficiente/ / ");
+								} else {
+
+									String email = usuario.getEmail();
+									Float saldo = (float) saldoDAO.getSaldo(email);
+									Float aposta = Float.parseFloat(var2);
+									usuario.setComprandoCartas(true);
+									if (saldo < aposta) {
+										t.transmite(clienteSocket, "ERR/Saldo insuficiente/ / ");
+									} else
+										t.transmite(clienteSocket, "SUC/Saldo suficiente/ / ");
+								}
 							} else
 								t.transmite(clienteSocket, "ERR/Erro ao apostar/ / ");
 							t.transmite(clienteSocket, "SUC/Fim Mensagens Aposta");
@@ -194,17 +200,18 @@ public class ServerManager {
 								InputMismatchException erro = new InputMismatchException(
 										"(CAR) Voce precisa estar em uma partida para solicitar cartas");
 								throw erro;
-							}else if (!partida.iniciaPartida()) {
-								t.transmite(clienteSocket, "ERR/Numero de jogadores insuficiente para entregar cartas/ / ");
-							}else{
+							} else if (!partida.iniciaPartida()) {
+								t.transmite(clienteSocket,
+										"ERR/Numero de jogadores insuficiente para entregar cartas/ / ");
+							} else {
 								usuario.setComprandoCartas(true);
 								for (int x = 0; x < 2; x++) {
 									Carta c = partida.getCarta(usuario.getEmail());
 									t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
 								}
-								t.transmite(clienteSocket, "CAR/Fim Transmissao cartas iniciais/ /");
 							}
-							break;								
+							t.transmite(clienteSocket, "CAR/Fim Transmissao cartas iniciais/ /");
+							break;
 						case "COM":
 							if (partida == null) {
 								InputMismatchException erro = new InputMismatchException(
@@ -214,8 +221,7 @@ public class ServerManager {
 							usuario.setComprandoCartas(true);
 							Carta c = partida.getCarta(usuario.getEmail());
 							t.transmite(clienteSocket, "CAR/" + c.getNipe() + "/" + c.getValor() + "/ ");
-							t.transmite(clienteSocket, "SUC/" + usuario.getSaldo() + "/ / ");
-							t.transmite(clienteSocket, "CAR/Fim Transmissao cartas adicionais/ /");
+							t.transmite(clienteSocket, "COM/Fim Transmissao cartas adicionais/ /");
 							break;
 						case "EOC": // ENVIAR EOC QUANDO NAO FARA MAIS NADA NA RODADA
 							if (partida == null) {
@@ -263,8 +269,8 @@ public class ServerManager {
 											"EOW/" + perdedores.get(x).getSaldo() + "/ / ");
 									t.transmite(clienteSocket, "EOW/Fim Transmissao Perdedores/ /");
 								}
-								t.transmite(clienteSocket, "EOW/Fim Transmissao Resultado/ /");
 							}
+							t.transmite(clienteSocket, "EOW/Fim Transmissao Resultado/ /");
 							break;
 						case "SAI":
 							partida.removeUsuario(usuario.getEmail());
