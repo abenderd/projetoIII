@@ -26,7 +26,7 @@ public class SaldoDAO {
 	
 	public void setSaldo(String email, float valor) throws SQLException, Exception {
 		try {
-			String sql = "UPDATE tbl_usuario SET saldo =" + valor + " WHERE eMail = '" + email + "'";
+			String sql = "UPDATE tbl_usuario SET saldo = " + valor + " WHERE eMail = '" + email + "'";
 			Conexao.conexao.prepareStatement(sql);
 			Conexao.conexao.executeUpdate();
 			Conexao.conexao.commit();

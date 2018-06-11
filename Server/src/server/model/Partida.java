@@ -3,10 +3,9 @@ package server.model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import server.dao.SaldoDAO;
 
-public class Partida {
+public class Partida implements Cloneable{
 	private ArrayList<Usuario> usuarios;
 	private ArrayList<Carta> baralho;
 	private int contadorCartas;
@@ -184,5 +183,45 @@ public class Partida {
 		return "Partida [usuarios=" + usuarios + ", baralho=" + baralho + ", contadorCartas=" + contadorCartas
 				+ ", pote=" + pote + ", nomePartida=" + nomePartida + ", status=" + status + ", saldo=" + saldo + "]";
 	}
+	
+	public Partida clonaPartida(){
+		try {
+			return (Partida) this.clone();
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Erro ao clonar Partida - " + e);
+			return null;
+		}
+	}
+	
+	/*public Object clone ()
+    {
+    	Partida p = null;
+    	
+    	try {
+			p = new Partida(this);
+		} catch (Exception e) {
+			System.err.println("Erro ao clonar Partida - " + e);
+		}
+    	
+    	return p;
+    }
+	
+	public Partida (Partida modelo) throws Exception
+    {
+    	if (modelo==null)
+            throw new Exception ("Modelo nao fornecido");
 
+    	modelo.usuarios = this.usuarios;
+    	modelo.baralho = this.baralho;
+    	modelo.contadorCartas = this.contadorCartas;
+    	modelo.pote = this.pote;
+    	modelo.nomePartida = this.nomePartida;
+    	modelo.status = this.status;
+    	modelo.saldo = this.saldo;
+    	
+        // inicia a instancia recem criada com NEW,
+        // de forma que seja INDEPENDENTE de this,
+        // porem com dados em tudo iguais aos presentes
+        // em this
+    }*/
 }

@@ -3,10 +3,8 @@ package server.main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import server.conection.Transmissor;
@@ -236,7 +234,10 @@ public class ServerManager {
 							}
 							usuario.setComprandoCartas(false);
 							if (partida.fimRodada()) { // VERIFICA SE RODADA ACABOU, SE SIM ENVIA WIN
-								ArrayList<Usuario> usuarios = partida.getUsuarios();
+								ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+								for(int x = 0; x < partida.getUsuarios().size(); x++){ //CLONA LISTA DE USUARIOS
+									usuarios.add(partida.getUsuarios().get(x));
+								}
 								ArrayList<Usuario> ganhadores = new ArrayList<Usuario>();
 								ArrayList<Usuario> perdedores = new ArrayList<Usuario>();
 								float valorPote = partida.getValorPorte();
@@ -259,7 +260,7 @@ public class ServerManager {
 								for (int x = 0; x < ganhadores.size(); x++) {
 									t.transmite(ganhadores.get(x).getClienteSocket(), "WIN/"
 											+ ganhadores.get(x).getNome() + "/" + ganhadores.get(x).getEmail() + "/ ");
-									ganhadores.get(x).setSaldo(valorPote);
+									saldoDAO.setSaldo(ganhadores.get(x).getEmail(), ganhadores.get(x).getSaldo() + valorPote); //Atualiza saldo no banco
 									t.transmite(ganhadores.get(x).getClienteSocket(),
 											"EOW/" + ganhadores.get(x).getSaldo() + "/ / ");
 									t.transmite(ganhadores.get(x).getClienteSocket(), "EOW/Fim Transmissao Ganhadores/ /");
