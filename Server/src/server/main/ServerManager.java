@@ -236,6 +236,7 @@ public class ServerManager {
 							if (partida.fimRodada()) { // VERIFICA SE RODADA ACABOU, SE SIM ENVIA WIN
 								ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 								for(int x = 0; x < partida.getUsuarios().size(); x++){ //CLONA LISTA DE USUARIOS
+									partida.getUsuarios().get(x).setComprandoCartas(true);
 									usuarios.add(partida.getUsuarios().get(x));
 								}
 								ArrayList<Usuario> ganhadores = new ArrayList<Usuario>();
