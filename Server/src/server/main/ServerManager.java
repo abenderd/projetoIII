@@ -262,16 +262,20 @@ public class ServerManager {
 									ganhadores.get(x).setSaldo(valorPote);
 									t.transmite(ganhadores.get(x).getClienteSocket(),
 											"EOW/" + ganhadores.get(x).getSaldo() + "/ / ");
-									t.transmite(clienteSocket, "EOW/Fim Transmissao Ganhadores/ /");
+									t.transmite(ganhadores.get(x).getClienteSocket(), "EOW/Fim Transmissao Ganhadores/ /");
+									t.transmite(ganhadores.get(x).getClienteSocket(), "EOW/Fim Transmissao EOC/ /");
+									t.transmite(ganhadores.get(x).getClienteSocket(), "EOW/Fim Transmissao Resultado/ /");
 								}
 								for (int x = 0; x < perdedores.size(); x++) {
 									t.transmite(perdedores.get(x).getClienteSocket(),
 											"EOW/" + perdedores.get(x).getSaldo() + "/ / ");
-									t.transmite(clienteSocket, "EOW/Fim Transmissao Perdedores/ /");
+									t.transmite(perdedores.get(x).getClienteSocket(), "EOW/Fim Transmissao Perdedores/ /");
+									t.transmite(perdedores.get(x).getClienteSocket(), "EOW/Fim Transmissao EOC/ /");
+									t.transmite(perdedores.get(x).getClienteSocket(), "EOW/Fim Transmissao Resultado/ /");
 								}
-								t.transmite(clienteSocket, "EOW/Fim Transmissao EOC/ /");
+								//t.transmite(clienteSocket, "EOW/Fim Transmissao EOC/ /");
 							}
-							t.transmite(clienteSocket, "EOW/Fim Transmissao Resultado/ /");
+							//t.transmite(clienteSocket, "EOW/Fim Transmissao Resultado/ /");
 							break;
 						case "SAI":
 							partida.removeUsuario(usuario.getEmail());
