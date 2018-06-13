@@ -177,13 +177,13 @@ public class TelaRodada extends JFrame {
 					
 					System.out.println("[INFO] Recebendo N Msg Fim da Rodada " + mensagensErros);
 					
-					if (mensagensErros.contains("Fim Transmissao Ganhadores")) {
-						JOptionPane.showMessageDialog(null, "Voce ganhou, parabéns!");
+					if (mensagensErros.contains("Fim Transmissao Perdedores")) {
+						JOptionPane.showMessageDialog(null, "Voce perdeu, tente novamente.");
 						mensagensErros.clear();
 						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
 					} else {
-						JOptionPane.showMessageDialog(null, "Voce perdeu, tente novamente.");
-						}
+						JOptionPane.showMessageDialog(null, "Voce ganhou, parabÃ©ns!");
+					}
 
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -213,9 +213,9 @@ public class TelaRodada extends JFrame {
 		btnDicas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null,
-						"A carta 'A' tera valor 11 se na mão houver um Valete (J), Dama (Q) ou Rei (K);" + '\n'
+						"A carta 'A' tera valor 11 se na mï¿½o houver um Valete (J), Dama (Q) ou Rei (K);" + '\n'
 								+ "Valete, Dama, Rei ou qualquer carta 10 equivalem a 10 pontos;" + '\n'
-								+ "As demais cartas possuem pontuação indicada por seus valores.");
+								+ "As demais cartas possuem pontuaï¿½ï¿½o indicada por seus valores.");
 			}
 		});
 		btnDicas.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -312,7 +312,7 @@ public class TelaRodada extends JFrame {
 			d = Integer.parseInt(cartasStream);
 
 			if (d == 0) {
-				System.out.println("[INFO] Carta Ás " + 0);
+				System.out.println("[INFO] Carta ï¿½s " + 0);
 				naipeString = "A";
 				contAs++;
 			} else if (d > 0 && d < 11) {

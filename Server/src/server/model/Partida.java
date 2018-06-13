@@ -109,7 +109,7 @@ public class Partida implements Cloneable{
 	}
 	
 	public boolean qtdeUsuario() {
-		if (usuarios.size() < 2 || usuarios.size() > 7) {
+		if (usuarios.size() < 3 || usuarios.size() > 7) {
 			return false;
 		}
 		return true;
