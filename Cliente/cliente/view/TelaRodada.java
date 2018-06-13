@@ -176,12 +176,17 @@ public class TelaRodada extends JFrame {
 							.map(s -> s.split("/")).map(p -> p[1]).collect(Collectors.toList());
 					
 					System.out.println("[INFO] Recebendo N Msg Fim da Rodada " + mensagensErros);
-					
-					if (mensagensErros.contains("Fim Transmissao Perdedores")) {
-						JOptionPane.showMessageDialog(null, "Voce perdeu, tente novamente.");
-						mensagensErros.clear();
-						conecta.recebeNMsg("ERR/Numero de jogadores insuficiente/ / ").clear();
-					} else {
+					int y=0;
+					for(int x=0;x<mensagemFinal.size();x++){
+						System.out.println("MSG: " + mensagemFinal.get(x));
+						if(mensagemFinal.get(x).equals("Fim Transmissao Perdedores")){
+							JOptionPane.showMessageDialog(null, "Voce perdeu, tente novamente.");
+							mensagemFinal.clear();
+							y=1;
+							break;
+						}
+					}
+					if(y==1){
 						JOptionPane.showMessageDialog(null, "Voce ganhou, parabéns!");
 					}
 
